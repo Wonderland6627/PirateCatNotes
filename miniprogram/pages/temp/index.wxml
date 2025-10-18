@@ -1,0 +1,5 @@
+<!--pages/temp/index.wxml-->
+<view class="container">
+  <text class="title">云函数测试页面</text>
+  <button class="test-btn" bindtap="onTestCloudFunction">测试云函数</button>
+</view>

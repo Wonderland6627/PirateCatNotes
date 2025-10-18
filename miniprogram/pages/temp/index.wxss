@@ -1,0 +1,31 @@
+/* pages/temp/index.wxss */
+.container {
+  padding: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 60rpx;
+}
+
+.test-btn {
+  background-color: #07c160;
+  color: white;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+  padding: 20rpx 40rpx;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(7, 193, 96, 0.3);
+}
+
+.test-btn:active {
+  background-color: #06ad56;
+  transform: translateY(2rpx);
+}

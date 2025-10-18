@@ -107,7 +107,7 @@ Page({
     } else if (selectedItem.type) {
       console.log("selectedItem", selectedItem)
       wx.navigateTo({
-        url: `/pages/example/index?envId=${this.data.selectedEnv?.envId}&type=${selectedItem.type}`,
+        url: `/pages/temp/index?envId=${this.data.selectedEnv?.envId}&type=${selectedItem.type}`,
       });
     } else if (selectedItem.page) {
       wx.navigateTo({
@@ -131,7 +131,7 @@ Page({
     console.log("jump page", type, page)
     if (type) {
       wx.navigateTo({
-        url: `/pages/example/index?envId=${this.data.selectedEnv?.envId}&type=${type}`,
+        url: `/pages/temp/index?envId=${this.data.selectedEnv?.envId}&type=${type}`,
       });
     } else {
       wx.navigateTo({
@@ -141,47 +141,16 @@ Page({
   },
 
   onClickDatabase(powerList,selectedItem) {
-    wx.showLoading({
-      title: '',
+    // 暂时禁用数据库创建功能，因为 quickstartFunctions 云函数已被删除
+    wx.showModal({
+      title: '提示',
+      content: '数据库功能暂时不可用，因为相关云函数已被删除。',
+      showCancel: false
     });
-    wx.cloud
-      .callFunction({
-        name: 'quickstartFunctions',
-        data: {
-          type: 'createCollection',
-        },
-      })
-      .then((resp) => {
-        if (resp.result.success) {
-          this.setData({
-            haveCreateCollection: true,
-          });
-        }
-        selectedItem.showItem = !selectedItem.showItem;
-        this.setData({
-          powerList,
-        });
-        wx.hideLoading();
-      })
-      .catch((e) => {
-        wx.hideLoading();
-        const { errCode, errMsg } = e
-        if (errMsg.includes('Environment not found')) {
-          this.setData({
-            showTip: true,
-            title: "云开发环境未找到",
-            content: "如果已经开通云开发，请检查环境ID与 `miniprogram/app.js` 中的 `env` 参数是否一致。"
-          });
-          return
-        }
-        if (errMsg.includes('FunctionName parameter could not be found')) {
-          this.setData({
-            showTip: true,
-            title: "请上传云函数",
-            content: "在'cloudfunctions/quickstartFunctions'目录右键，选择【上传并部署-云端安装依赖】，等待云函数上传完成后重试。"
-          });
-          return
-        }
-      });
+    
+    selectedItem.showItem = !selectedItem.showItem;
+    this.setData({
+      powerList,
+    });
   },
 });
