@@ -10,3 +10,16 @@
 
 - [云开发文档](https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/getting-started.html)
 
+# 🏴‍☠️ 海盗猫笔记 (Pirate Cat Notes)
+
+**一个充满个性的智能事件提醒微信小程序。让一只酷酷的海盗猫，成为您绝不遗忘的日程管家。**
+
+## ✨ 核心功能
+
+- **🗓️ 灵活事件创建** - 支持为事件设置未来的具体日期与时间
+- **⏰ 微信消息提醒** - 通过微信服务通知准时推送提醒
+- **🏴‍☠️ 趣味品牌体验** - 独特的海盗猫IP形象，让管理日程像寻宝冒险
+
+**欢迎 Star ⭐ 和 Fork！** 期待您的贡献，一起完善这个有趣的项目！
+
+- [微信小程序订阅消息文档](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/subscribe-message-overview.html)
