@@ -2,4 +2,7 @@
 <view class="container">
   <text class="title">云函数测试页面</text>
   <button class="test-btn" bindtap="onTestCloudFunction">测试云函数</button>
+  <button class="subscribe-btn" bindtap="onRequestSubscribeMessage">订阅消息</button>
+  <button class="send-btn" bindtap="onSendSubscribeMessage">发送订阅消息</button>
+  <button class="check-btn" bindtap="onCheckSubscribeStatus">检查订阅状态</button>
 </view>
