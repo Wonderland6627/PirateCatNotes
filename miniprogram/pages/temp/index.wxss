@@ -29,3 +29,11 @@
   background-color: #06ad56;
   transform: translateY(2rpx);
 }
+
+.tip {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 40rpx;
+  text-align: center;
+  line-height: 1.5;
+}

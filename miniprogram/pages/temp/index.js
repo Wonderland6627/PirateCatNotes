@@ -12,14 +12,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    // this.getWxContext()
+    
   },
 
   async getWxContext() {
-    const resp = await getApp().globalData.sharedCloud.callFunction({
-      name: 'piratecat_notes_get_wx_context',
+    const result = await wx.cloud.callFunction({
+      name: 'piratecat_notes_get_wx_context'
     })
-    console.log(resp)
+    
+    console.log('返回值:', result.result)
   },
 
   /**
