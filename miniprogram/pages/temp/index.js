@@ -1,4 +1,6 @@
 // pages/temp/index.js
+const logger = require('../../logger')
+
 Page({
 
   /**
@@ -20,7 +22,7 @@ Page({
       name: 'piratecat_notes_get_wx_context'
     })
     
-    console.log('返回值:', result.result)
+    logger.info('返回值: ' + JSON.stringify(result.result))
   },
 
   /**
@@ -37,7 +39,7 @@ Page({
     wx.requestSubscribeMessage({
       tmplIds: [this.data.templateId],
       success: (res) => {
-        console.log('订阅消息结果:', res)
+        logger.info('订阅消息结果: ' + JSON.stringify(res))
         const templateId = this.data.templateId
         if (res[templateId] === 'accept') {
           wx.showToast({
@@ -57,7 +59,7 @@ Page({
         }
       },
       fail: (err) => {
-        console.error('订阅消息失败:', err)
+        logger.error('订阅消息失败: ' + JSON.stringify(err))
         wx.showToast({
           title: '订阅失败',
           icon: 'none'
@@ -89,7 +91,7 @@ Page({
       })
 
       wx.hideLoading()
-      console.log('发送结果:', result.result)
+      logger.info('发送结果: ' + JSON.stringify(result.result))
       
       if (result.result.success) {
         wx.showToast({
@@ -104,7 +106,7 @@ Page({
       }
     } catch (error) {
       wx.hideLoading()
-      console.error('发送订阅消息失败:', error)
+      logger.error('发送订阅消息失败: ' + JSON.stringify(error))
       wx.showToast({
         title: '发送失败',
         icon: 'none'
@@ -117,44 +119,71 @@ Page({
    */
   onCheckSubscribeStatus() {
     wx.getSetting({
+      withSubscriptions: true, // 添加这个参数来获取订阅消息设置
       success: (res) => {
-        console.log('用户设置:', res)
+        logger.info('用户设置序列化: ' + JSON.stringify(res, null, 2))
         const templateId = this.data.templateId
         
-        if (res.subscriptionsSetting && res.subscriptionsSetting[templateId]) {
-          const status = res.subscriptionsSetting[templateId]
-          let message = ''
+        if (res.subscriptionsSetting) {
+          const mainSwitch = res.subscriptionsSetting.mainSwitch
+          const itemSettings = res.subscriptionsSetting.itemSettings
           
-          
-          switch (status) {
-            case 'accept':
-              message = '已订阅该模板消息'
-              break
-            case 'reject':
-              message = '已拒绝该模板消息'
-              break
-            case 'ban':
-              message = '该模板消息已被封禁'
-              break
-            default:
-              message = '未知状态'
+          // 检查总开关状态
+          if (!mainSwitch) {
+            wx.showModal({
+              title: '订阅状态',
+              content: `模板ID: ${templateId}\n总开关: 关闭\n状态: 订阅消息总开关已关闭`,
+              showCancel: false
+            })
+            return
           }
           
-          wx.showModal({
-            title: '订阅状态',
-            content: `模板ID: ${templateId}\n状态: ${message}`,
-            showCancel: false
-          })
+          // 获取模板状态 - 优先从itemSettings获取，如果没有则从根级别获取
+          let templateStatus = null
+          if (itemSettings && itemSettings[templateId]) {
+            templateStatus = itemSettings[templateId]
+          } else if (res.subscriptionsSetting[templateId]) {
+            templateStatus = res.subscriptionsSetting[templateId]
+          }
+          
+          if (templateStatus) {
+            let message = ''
+            switch (templateStatus) {
+              case 'accept':
+                message = '已订阅该模板消息'
+                break
+              case 'reject':
+                message = '已拒绝该模板消息'
+                break
+              case 'ban':
+                message = '该模板消息已被封禁'
+                break
+              default:
+                message = '未知状态'
+            }
+            
+            wx.showModal({
+              title: '订阅状态',
+              content: `模板ID: ${templateId}\n总开关: 开启\n状态: ${message}`,
+              showCancel: false
+            })
+          } else {
+            wx.showModal({
+              title: '订阅状态',
+              content: `模板ID: ${templateId}\n总开关: 开启\n状态: 用户尚未对该模板进行订阅操作`,
+              showCancel: false
+            })
+          }
         } else {
           wx.showModal({
             title: '订阅状态',
-            content: '未找到该模板的订阅状态',
+            content: '无法获取订阅消息设置',
             showCancel: false
           })
         }
       },
       fail: (err) => {
-        console.error('获取设置失败:', err)
+        logger.error('获取设置失败: ' + JSON.stringify(err))
         wx.showToast({
           title: '获取状态失败',
           icon: 'none'
