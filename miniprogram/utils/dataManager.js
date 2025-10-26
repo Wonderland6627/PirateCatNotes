@@ -2,6 +2,9 @@
 const logger = require('../logger')
 const CONSTANTS = require('../config/constants')
 
+// 创建带标签的 logger
+const log = logger.create('dataManager')
+
 /**
  * 数据中心 - 管理本地和数据库之间的数据同步
  */
@@ -38,7 +41,7 @@ class DataManager {
       
       if (loginResult.result.openid) {
         this._openid = loginResult.result.openid
-        logger.info('数据中心初始化成功，openid: ' + this._openid)
+        log.info('数据中心初始化成功，openid: ' + this._openid)
         
         // 初始化用户信息到数据库
         await this.initUserRecord()
@@ -48,7 +51,7 @@ class DataManager {
       }
       return false
     } catch (error) {
-      logger.error('数据中心初始化失败: ' + JSON.stringify(error))
+      log.error('数据中心初始化失败: ' + JSON.stringify(error))
       return false
     }
   }
@@ -88,12 +91,12 @@ class DataManager {
             avatarUrl: null
           }
         })
-        logger.info('创建未注册用户记录')
+        log.info('创建未注册用户记录')
       } else {
-        logger.info('用户已存在')
+        log.info('用户已存在')
       }
     } catch (error) {
-      logger.error('初始化用户记录失败: ' + JSON.stringify(error))
+      log.error('初始化用户记录失败: ' + JSON.stringify(error))
     }
   }
 
@@ -138,7 +141,7 @@ class DataManager {
       
       return null
     } catch (error) {
-      logger.error('获取用户信息失败: ' + JSON.stringify(error))
+      log.error('获取用户信息失败: ' + JSON.stringify(error))
       // 失败则尝试从本地存储加载
       const localUserInfo = wx.getStorageSync(CONSTANTS.STORAGE_KEY.USER_INFO)
       if (localUserInfo) {
@@ -189,13 +192,13 @@ class DataManager {
           avatarUrl: userInfo.avatarUrl
         })
         
-        logger.info('用户信息已保存，昵称: ' + userInfo.nickName)
+        log.info('用户信息已保存，昵称: ' + userInfo.nickName)
         return true
       }
       
       return false
     } catch (error) {
-      logger.error('保存用户信息失败: ' + JSON.stringify(error))
+      log.error('保存用户信息失败: ' + JSON.stringify(error))
       return false
     }
   }

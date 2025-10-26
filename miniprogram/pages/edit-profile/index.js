@@ -4,6 +4,9 @@ const dataManager = require('../../utils/dataManager.js')
 const commonUtils = require('../../utils/commonUtils.js')
 const CONSTANTS = require('../../config/constants')
 
+// 创建带标签的 logger
+const log = logger.create('edit-profile')
+
 Page({
 
   /**
@@ -58,7 +61,7 @@ Page({
    * 选择头像
    */
   async onChooseAvatar(e) {
-    logger.info('选择头像: ' + JSON.stringify(e.detail))
+    log.info('选择头像: ' + JSON.stringify(e.detail))
     const { avatarUrl } = e.detail
     
     try {
@@ -70,9 +73,9 @@ Page({
         'userInfo.avatarUrl': cloudUrl
       })
       
-      logger.info('头像已上传到云存储: ' + cloudUrl)
+      log.info('头像已上传到云存储: ' + cloudUrl)
     } catch (error) {
-      logger.error('上传头像失败: ' + JSON.stringify(error))
+      log.error('上传头像失败: ' + JSON.stringify(error))
       wx.showToast({
         title: '上传失败',
         icon: 'none'
@@ -94,7 +97,7 @@ Page({
     // 如果 openid 为空，使用随机 UUID 代替
     if (!prefix) {
       prefix = commonUtils.generateUUID()
-      logger.warn('openid 为空，使用随机 UUID 代替: ' + prefix)
+      log.warn('openid 为空，使用随机 UUID 代替: ' + prefix)
     }
     
     const fileName = `${CONSTANTS.CLOUD_STORAGE.AVATARS}${prefix}_${Date.now()}.${ext}`
@@ -114,7 +117,6 @@ Page({
    */
   onNicknameBlur(e) {
     const nickName = e.detail.value || ''
-    logger.info('输入昵称: ' + nickName)
     this.setData({
       'userInfo.nickName': nickName
     })
@@ -130,7 +132,7 @@ Page({
       avatarUrl: this.data.userInfo.avatarUrl || USER_DEFAULTS.AVATAR_URL
     }
     
-    logger.info('准备保存用户信息: ' + JSON.stringify(userInfo))
+    log.info('准备保存用户信息: ' + JSON.stringify(userInfo))
     
     // 验证是否填写完整（只验证昵称）
     if (!userInfo.nickName) {
