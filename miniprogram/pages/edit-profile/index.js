@@ -1,6 +1,7 @@
 // pages/edit-profile/index.js
 const logger = require('../../logger')
 const dataManager = require('../../utils/dataManager.js')
+const commonUtils = require('../../utils/commonUtils.js')
 
 Page({
 
@@ -59,11 +60,6 @@ Page({
     logger.info('选择头像: ' + JSON.stringify(e.detail))
     const { avatarUrl } = e.detail
     
-    // 显示上传进度
-    wx.showLoading({
-      title: '上传中...'
-    })
-    
     try {
       // 上传头像到云存储
       const cloudUrl = await this.uploadAvatarToCloud(avatarUrl)
@@ -91,7 +87,16 @@ Page({
   async uploadAvatarToCloud(localPath) {
     // 获取文件扩展名
     const ext = localPath.split('.').pop()
-    const fileName = 'avatars/' + Date.now() + '.' + ext
+    // 获取 openid 用于文件名前缀，防止冲突
+    let prefix = dataManager.getOpenid()
+    
+    // 如果 openid 为空，使用随机 UUID 代替
+    if (!prefix) {
+      prefix = commonUtils.generateUUID()
+      logger.warn('openid 为空，使用随机 UUID 代替: ' + prefix)
+    }
+    
+    const fileName = `avatars/${prefix}_${Date.now()}.${ext}`
     
     // 上传到云存储
     const result = await wx.cloud.uploadFile({
@@ -101,6 +106,7 @@ Page({
     
     return result.fileID
   },
+
 
   /**
    * 昵称输入框失焦
