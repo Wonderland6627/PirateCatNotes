@@ -1,5 +1,6 @@
 // pages/todo/index.js - 创建提醒事项页面
 const logger = require('../../logger')
+const log = logger.create('todo')
 const dataManager = require('../../utils/dataManager')
 
 Page({
@@ -101,6 +102,35 @@ Page({
       return
     }
 
+    // 先请求订阅消息权限
+    try {
+      const templateId = 'IiYABIcxdWwaAbqXPb71Yijw-iYMRlbRpghZCT58eQ8'
+      const subscribeResult = await new Promise((resolve) => {
+        wx.requestSubscribeMessage({
+          tmplIds: [templateId],
+          success: (res) => {
+            resolve(res)
+          },
+          fail: (err) => {
+            resolve(null)
+          }
+        })
+      })
+
+      // 即使用户拒绝订阅，也允许创建事项（只是不会收到消息）
+      if (subscribeResult) {
+        const status = subscribeResult[templateId]
+        if (status === 'accept') {
+          log.info('用户已接受订阅消息')
+        } else if (status === 'reject') {
+          log.info('用户拒绝订阅消息')
+        }
+      }
+    } catch (error) {
+      log.error('请求订阅权限失败: ' + error.message)
+      // 订阅权限请求失败不影响创建事项
+    }
+
     this.setData({
       submitting: true
     })
@@ -148,7 +178,7 @@ Page({
       }
     } catch (error) {
       wx.hideLoading()
-      logger.error('创建提醒事项异常: ' + JSON.stringify(error))
+      log.error('创建提醒事项异常: ' + JSON.stringify(error))
       wx.showToast({
         title: '创建失败',
         icon: 'none'

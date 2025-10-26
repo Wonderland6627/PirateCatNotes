@@ -7,7 +7,8 @@ const CONSTANTS = {
   // 云函数名称
   CLOUD_FUNCTION: {
     GET_WX_CONTEXT: 'piratecat_notes_get_wx_context',
-    SEND_SUBSCRIBE_MESSAGE: 'piratecat_notes_send_subscribe_message'
+    SEND_SUBSCRIBE_MESSAGE: 'piratecat_notes_send_subscribe_message',
+    CHECK_TODOS: 'piratecat_notes_check_todos'
   },
 
   // 数据库集合名称
