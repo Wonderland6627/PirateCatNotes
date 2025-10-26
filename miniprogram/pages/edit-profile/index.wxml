@@ -10,7 +10,7 @@
     <view class="avatar-section">
       <text class="section-label">头像</text>
       <button class="avatar-button" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-        <image class="avatar" src="{{userInfo.avatarUrl || '/images/avatar.png'}}" mode="aspectFill"></image>
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
         <text class="avatar-hint">点击更换</text>
       </button>
     </view>

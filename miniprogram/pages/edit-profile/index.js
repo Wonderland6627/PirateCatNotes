@@ -1,5 +1,6 @@
 // pages/edit-profile/index.js
 const logger = require('../../logger')
+const dataManager = require('../../utils/dataManager.js')
 
 Page({
 
@@ -17,72 +18,88 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-    // 从本地存储加载用户信息
+  async onLoad(options) {
+    // 等待数据中心初始化完成
+    await dataManager.init()
+    // 从数据中心加载用户信息
     this.loadUserInfo()
   },
 
   /**
-   * 从本地存储加载用户信息
+   * 从数据中心加载用户信息
    */
-  loadUserInfo() {
-    // 直接从数据库加载
-    this.loadUserInfoFromDB()
-  },
-
-  /**
-   * 从数据库加载用户信息
-   */
-  async loadUserInfoFromDB() {
-    try {
-      const db = wx.cloud.database()
-      const userCollection = db.collection('piratecat_notes_user')
-      
-      const loginResult = await wx.cloud.callFunction({
-        name: 'piratecat_notes_get_wx_context'
+  async loadUserInfo() {
+    const USER_DEFAULTS = require('../../config/userDefaults.js')
+    const userInfo = await dataManager.getUserInfo(true)
+    
+    if (userInfo) {
+      this.setData({
+        userInfo: {
+          nickName: userInfo.nickName || '',
+          avatarUrl: userInfo.avatarUrl || USER_DEFAULTS.AVATAR_URL
+        },
+        isRegistered: userInfo.isRegistered
       })
-      
-      if (loginResult.result.openid) {
-        const queryResult = await userCollection.where({
-          _openid: loginResult.result.openid
-        }).get()
-        
-        if (queryResult.data.length > 0) {
-          const dbUserInfo = queryResult.data[0]
-          // 判断是否已注册（是否有真实信息）
-          const isRegistered = dbUserInfo.nickName && dbUserInfo.avatarUrl
-          
-          const userInfo = {
-            nickName: dbUserInfo.nickName || '',
-            avatarUrl: dbUserInfo.avatarUrl || ''
-          }
-          
-          this.setData({
-            userInfo: userInfo,
-            isRegistered: isRegistered
-          })
-          
-          // 如果有信息，同步到本地存储
-          if (isRegistered) {
-            wx.setStorageSync('userInfo', userInfo)
-          }
-        }
-      }
-    } catch (error) {
-      logger.error('从数据库加载用户信息失败: ' + JSON.stringify(error))
+    } else {
+      // 如果没有用户信息，使用默认值
+      this.setData({
+        userInfo: {
+          nickName: '',
+          avatarUrl: USER_DEFAULTS.AVATAR_URL
+        },
+        isRegistered: false
+      })
     }
   },
 
   /**
    * 选择头像
    */
-  onChooseAvatar(e) {
+  async onChooseAvatar(e) {
     logger.info('选择头像: ' + JSON.stringify(e.detail))
     const { avatarUrl } = e.detail
-    this.setData({
-      'userInfo.avatarUrl': avatarUrl
+    
+    // 显示上传进度
+    wx.showLoading({
+      title: '上传中...'
     })
-    logger.info('头像已更新: ' + avatarUrl)
+    
+    try {
+      // 上传头像到云存储
+      const cloudUrl = await this.uploadAvatarToCloud(avatarUrl)
+      
+      // 更新为云存储地址
+      this.setData({
+        'userInfo.avatarUrl': cloudUrl
+      })
+      
+      logger.info('头像已上传到云存储: ' + cloudUrl)
+    } catch (error) {
+      logger.error('上传头像失败: ' + JSON.stringify(error))
+      wx.showToast({
+        title: '上传失败',
+        icon: 'none'
+      })
+    } finally {
+      wx.hideLoading()
+    }
+  },
+
+  /**
+   * 上传头像到云存储
+   */
+  async uploadAvatarToCloud(localPath) {
+    // 获取文件扩展名
+    const ext = localPath.split('.').pop()
+    const fileName = 'avatars/' + Date.now() + '.' + ext
+    
+    // 上传到云存储
+    const result = await wx.cloud.uploadFile({
+      cloudPath: fileName,
+      filePath: localPath
+    })
+    
+    return result.fileID
   },
 
   /**
@@ -100,72 +117,37 @@ Page({
    * 保存用户信息
    */
   async onSaveUserInfo() {
+    const USER_DEFAULTS = require('../../config/userDefaults.js')
     const userInfo = {
       nickName: this.data.userInfo.nickName || '',
-      avatarUrl: this.data.userInfo.avatarUrl || ''
+      avatarUrl: this.data.userInfo.avatarUrl || USER_DEFAULTS.AVATAR_URL
     }
     
     logger.info('准备保存用户信息: ' + JSON.stringify(userInfo))
     
-    // 验证是否填写完整
-    if (!userInfo.nickName || !userInfo.avatarUrl) {
+    // 验证是否填写完整（只验证昵称）
+    if (!userInfo.nickName) {
       wx.showToast({
-        title: '请填写完整信息',
+        title: '请输入昵称',
         icon: 'none'
       })
       return
     }
     
-    // 保存用户信息到本地存储
-    wx.setStorageSync('userInfo', userInfo)
+    // 通过数据中心保存用户信息
+    const success = await dataManager.saveUserInfo(userInfo)
     
-    // 保存用户信息到数据库
-    await this.saveUserInfoToDB(userInfo)
-    
-    wx.showToast({
-      title: '保存成功',
-      icon: 'success'
-    })
-    
-    // 延迟返回上一页
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 1500)
-  },
-
-  /**
-   * 保存用户信息到数据库
-   */
-  async saveUserInfoToDB(userInfo) {
-    try {
-      const db = wx.cloud.database()
-      const userCollection = db.collection('piratecat_notes_user')
-      
-      // 获取当前用户的 openid
-      const loginResult = await wx.cloud.callFunction({
-        name: 'piratecat_notes_get_wx_context'
+    if (success) {
+      wx.showToast({
+        title: '保存成功',
+        icon: 'success'
       })
       
-      if (loginResult.result.openid) {
-        const openid = loginResult.result.openid
-        
-        // 查询用户是否存在
-        const queryResult = await userCollection.where({
-          _openid: openid
-        }).get()
-        
-        // 用户记录肯定存在（初始化时已创建），直接更新
-        const docId = queryResult.data[0]._id
-        await userCollection.doc(docId).update({
-          data: {
-            nickName: userInfo.nickName,
-            avatarUrl: userInfo.avatarUrl
-          }
-        })
-        logger.info('用户信息已保存到数据库，昵称: ' + userInfo.nickName)
-      }
-    } catch (error) {
-      logger.error('保存用户信息到数据库失败: ' + JSON.stringify(error))
+      // 延迟返回上一页
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 1500)
+    } else {
       wx.showToast({
         title: '保存失败',
         icon: 'none'
