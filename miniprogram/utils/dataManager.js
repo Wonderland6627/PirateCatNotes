@@ -1,5 +1,6 @@
 // utils/dataManager.js
 const logger = require('../logger')
+const CONSTANTS = require('../config/constants')
 
 /**
  * 数据中心 - 管理本地和数据库之间的数据同步
@@ -32,7 +33,7 @@ class DataManager {
     try {
       // 获取用户的 openid
       const loginResult = await wx.cloud.callFunction({
-        name: 'piratecat_notes_get_wx_context'
+        name: CONSTANTS.CLOUD_FUNCTION.GET_WX_CONTEXT
       })
       
       if (loginResult.result.openid) {
@@ -72,7 +73,7 @@ class DataManager {
   async initUserRecord() {
     try {
       const db = wx.cloud.database()
-      const userCollection = db.collection('piratecat_notes_user')
+      const userCollection = db.collection(CONSTANTS.COLLECTION.USER)
       
       // 查询用户是否存在
       const queryResult = await userCollection.where({
@@ -109,7 +110,7 @@ class DataManager {
 
     try {
       const db = wx.cloud.database()
-      const userCollection = db.collection('piratecat_notes_user')
+      const userCollection = db.collection(CONSTANTS.COLLECTION.USER)
       
       const queryResult = await userCollection.where({
         _openid: this._openid
@@ -126,7 +127,7 @@ class DataManager {
         
         // 如果已注册，同步到本地存储
         if (this._userInfo.isRegistered) {
-          wx.setStorageSync('userInfo', {
+          wx.setStorageSync(CONSTANTS.STORAGE_KEY.USER_INFO, {
             nickName: this._userInfo.nickName,
             avatarUrl: this._userInfo.avatarUrl
           })
@@ -139,7 +140,7 @@ class DataManager {
     } catch (error) {
       logger.error('获取用户信息失败: ' + JSON.stringify(error))
       // 失败则尝试从本地存储加载
-      const localUserInfo = wx.getStorageSync('userInfo')
+      const localUserInfo = wx.getStorageSync(CONSTANTS.STORAGE_KEY.USER_INFO)
       if (localUserInfo) {
         this._userInfo = {
           ...localUserInfo,
@@ -159,7 +160,7 @@ class DataManager {
   async saveUserInfo(userInfo) {
     try {
       const db = wx.cloud.database()
-      const userCollection = db.collection('piratecat_notes_user')
+      const userCollection = db.collection(CONSTANTS.COLLECTION.USER)
       
       // 查询用户是否存在
       const queryResult = await userCollection.where({
@@ -183,7 +184,7 @@ class DataManager {
         }
         
         // 同步到本地存储
-        wx.setStorageSync('userInfo', {
+        wx.setStorageSync(CONSTANTS.STORAGE_KEY.USER_INFO, {
           nickName: userInfo.nickName,
           avatarUrl: userInfo.avatarUrl
         })

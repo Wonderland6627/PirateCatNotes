@@ -2,6 +2,7 @@
 const logger = require('../../logger')
 const dataManager = require('../../utils/dataManager.js')
 const commonUtils = require('../../utils/commonUtils.js')
+const CONSTANTS = require('../../config/constants')
 
 Page({
 
@@ -96,7 +97,7 @@ Page({
       logger.warn('openid 为空，使用随机 UUID 代替: ' + prefix)
     }
     
-    const fileName = `avatars/${prefix}_${Date.now()}.${ext}`
+    const fileName = `${CONSTANTS.CLOUD_STORAGE.AVATARS}${prefix}_${Date.now()}.${ext}`
     
     // 上传到云存储
     const result = await wx.cloud.uploadFile({

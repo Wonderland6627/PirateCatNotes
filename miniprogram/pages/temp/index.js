@@ -1,5 +1,6 @@
 // pages/temp/index.js
 const logger = require('../../logger')
+const CONSTANTS = require('../../config/constants')
 
 Page({
 
@@ -19,7 +20,7 @@ Page({
 
   async getWxContext() {
     const result = await wx.cloud.callFunction({
-      name: 'piratecat_notes_get_wx_context'
+      name: CONSTANTS.CLOUD_FUNCTION.GET_WX_CONTEXT
     })
     
     logger.info('返回值: ' + JSON.stringify(result.result))
