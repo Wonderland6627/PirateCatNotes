@@ -29,7 +29,7 @@
 ### 1. piratecat_notes_user（用户表）
 | 字段名 | 类型 | 说明 |
 |--------|------|------|
-| nickname | String | 用户昵称 |
+| nickName | String | 用户昵称 |
 | avatarUrl | String | 用户头像 |
 
 ### 2. piratecat_notes_todo（事项表）

@@ -1,0 +1,29 @@
+<!--pages/edit-profile/index.wxml-->
+<view class="edit-profile-container">
+  <view class="profile-header">
+    <text class="header-title">编辑个人信息</text>
+      <text class="header-desc">{{isRegistered ? '点击头像或输入昵称来修改' : '填写头像和昵称完成注册'}}</text>
+  </view>
+
+  <view class="content-section">
+    <!-- 头像选择 -->
+    <view class="avatar-section">
+      <text class="section-label">头像</text>
+      <button class="avatar-button" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{userInfo.avatarUrl || '/images/avatar.png'}}" mode="aspectFill"></image>
+        <text class="avatar-hint">点击更换</text>
+      </button>
+    </view>
+
+    <!-- 昵称输入 -->
+    <view class="nickname-section">
+      <text class="section-label">昵称</text>
+      <input type="nickname" class="nickname-input" value="{{userInfo.nickName}}" bindblur="onNicknameBlur" placeholder="请输入昵称" />
+    </view>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="save-section">
+    <button class="save-btn" bindtap="onSaveUserInfo">{{isRegistered ? '保存' : '注册'}}</button>
+  </view>
+</view>

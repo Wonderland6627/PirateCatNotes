@@ -1,0 +1,55 @@
+<!--pages/profile/index.wxml-->
+<view class="profile-container">
+  <!-- 背景图 -->
+  <view class="background-image">
+    <image class="bg-img" mode="aspectFill" src="https://images.unsplash.com/photo-1558478551-891f59c0a40e?w=800&h=400&fit=crop"></image>
+    <view class="bg-overlay"></view>
+  </view>
+
+  <!-- 用户信息区域 -->
+  <view class="user-info-section">
+    <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <text class="nickname">{{userInfo.nickName}}</text>
+    <text class="welcome">欢迎来到海盗猫笔记</text>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <!-- 编辑个人信息 -->
+    <view class="menu-item" bindtap="onNavigateToEditProfile">
+      <view class="menu-left">
+        <image class="menu-icon" src="/images/icons/copy.png"></image>
+        <text class="menu-text">编辑个人信息</text>
+      </view>
+      <image class="menu-arrow" src="/images/icons/copy.png"></image>
+    </view>
+
+    <!-- 设置 -->
+    <view class="menu-item" bindtap="onNavigateToSettings">
+      <view class="menu-left">
+        <image class="menu-icon" src="/images/icons/setting.svg"></image>
+        <text class="menu-text">设置</text>
+      </view>
+      <image class="menu-arrow" src="/images/icons/copy.png"></image>
+    </view>
+
+    <!-- 关于我们 -->
+    <view class="menu-item" bindtap="onAboutUs">
+      <view class="menu-left">
+        <image class="menu-icon" src="/images/icons/question.svg"></image>
+        <text class="menu-text">关于我们</text>
+      </view>
+      <image class="menu-arrow" src="/images/icons/copy.png"></image>
+    </view>
+
+    <!-- 客服 -->
+    <view class="menu-item">
+      <view class="menu-left">
+        <image class="menu-icon" src="/images/icons/customer-service.svg"></image>
+        <text class="menu-text">客服中心</text>
+      </view>
+      <image class="menu-arrow" src="/images/icons/copy.png"></image>
+    </view>
+  </view>
+
+</view>
