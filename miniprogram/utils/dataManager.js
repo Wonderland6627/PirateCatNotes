@@ -209,6 +209,69 @@ class DataManager {
   clearCache() {
     this._userInfo = null
   }
+
+  /**
+   * 创建提醒事项
+   * @param {Object} todoData - 提醒事项数据 { title, description, remindAt }
+   * @returns {Promise<boolean>} 是否创建成功
+   */
+  async createTodo(todoData) {
+    try {
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      // 将 remindAt 字符串转换为 Date 对象
+      // 格式: "YYYY-MM-DD HH:mm" (如 "2024-01-15 14:30")
+      let remindAt = null
+      if (todoData.remindAt) {
+        // 替换 - 为 / 以便 Date 解析
+        const dateStr = todoData.remindAt.replace(/-/g, '/')
+        remindAt = new Date(dateStr)
+      }
+      
+      // 准备要保存的数据
+      const dataToSave = {
+        title: todoData.title,
+        description: todoData.description || '',
+        remindAt: remindAt,
+        creatorOpenID: this._openid,
+        createdAt: db.serverDate(),
+        updatedAt: db.serverDate()
+      }
+      
+      // 保存数据
+      const result = await todoCollection.add({
+        data: dataToSave
+      })
+
+      log.info('创建提醒事项成功: ' + JSON.stringify(dataToSave) + ' Response: ' + JSON.stringify(result))
+      
+      return true
+    } catch (error) {
+      log.error('创建提醒事项失败: ' + JSON.stringify(error))
+      return false
+    }
+  }
+
+  /**
+   * 获取用户的提醒事项列表
+   * @returns {Promise<Array>} 提醒事项列表
+   */
+  async getTodoList() {
+    try {
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      const result = await todoCollection.where({
+        creatorOpenID: this._openid
+      }).orderBy('remindAt', 'asc').get()
+      
+      return result.data
+    } catch (error) {
+      log.error('获取提醒事项列表失败: ' + JSON.stringify(error))
+      return []
+    }
+  }
 }
 
 // 导出单例

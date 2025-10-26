@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/todo/index",
     "pages/temp/index",
     "pages/profile/index",
     "pages/edit-profile/index",
@@ -9,7 +10,7 @@
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarTitleText": "提醒事项",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
@@ -18,8 +19,8 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/temp/index",
-        "text": "首页",
+        "pagePath": "pages/todo/index",
+        "text": "待办",
         "iconPath": "images/icons/home.png",
         "selectedIconPath": "images/icons/home-active.png"
       },

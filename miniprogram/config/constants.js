@@ -12,7 +12,8 @@ const CONSTANTS = {
 
   // 数据库集合名称
   COLLECTION: {
-    USER: 'piratecat_notes_user'
+    USER: 'piratecat_notes_user',
+    TODO: 'piratecat_notes_todo'
   },
 
   // 云存储路径

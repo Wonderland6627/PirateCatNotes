@@ -15,12 +15,12 @@
 ### 后端开发
 - [x] 发送订阅消息
 - [x] User表
-- [ ] 事项表
+- [x] 事项表
 - [ ] 分享记录表、事项参与者表
 
 ### 前端开发
 - [x] 订阅消息提醒权限
-- [ ] 注册、登录、头像
+- [x] 注册、登录、头像
 - [ ] 建事项表、事项列表、管理事项、分享事项
 - [ ] 提醒消息页、接受合作等
 
@@ -31,17 +31,23 @@
 |--------|------|------|
 | nickName | String | 用户昵称 |
 | avatarUrl | String | 用户头像 |
+| createdAt | Date | 创建时间 |
+| updatedAt | Date | 更新时间 |
 
 ### 2. piratecat_notes_todo（事项表）
 | 字段名 | 类型 | 说明 |
 |--------|------|------|
 | title | String | 事项标题 |
 | description | String | 事项详细描述 |
-| remindTime | Date | 提醒时间 |
+| remindAt | Date | 提醒时间 |
 | creatorOpenID | String | 创建者openid（关联User表） |
+| createdAt | Date | 创建时间 |
+| updatedAt | Date | 更新时间 |
 
-用户注册流程：用户A注册，piratecat_notes_user表新增一行
-用户创建事项流程：用户A填写对应信息，piratecat_notes_todo表新增一行
+用户启动流程：
+    用户启动，检查piratecat_notes_user表，存在则读取，不存在则创建一行空数据。
+用户创建事项流程：
+    用户A填写对应信息，piratecat_notes_todo表新增一行
 
 ## 📨 订阅消息模板
 
