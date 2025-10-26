@@ -38,7 +38,10 @@
 | title | String | 事项标题 |
 | description | String | 事项详细描述 |
 | remindTime | Date | 提醒时间 |
-| creatorId | String | 创建者openid（关联User表） |
+| creatorOpenID | String | 创建者openid（关联User表） |
+
+用户注册流程：用户A注册，piratecat_notes_user表新增一行
+用户创建事项流程：用户A填写对应信息，piratecat_notes_todo表新增一行
 
 ## 📨 订阅消息模板
 
