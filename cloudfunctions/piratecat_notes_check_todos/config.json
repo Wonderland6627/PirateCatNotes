@@ -8,7 +8,7 @@
     {
       "name": "checkTodos",
       "type": "timer",
-      "config": "*/2 * * * * *"
+      "config": "0 * * * * *"
     }
   ]
 }
