@@ -1,0 +1,46 @@
+<!--pages/reminder/index.wxml - 提醒事项列表页面-->
+<view class="container">
+  <view class="header">
+    <image class="header-icon" src="../../images/icons/home.png" />
+    <view class="header-info">
+      <text class="header-title">待办</text>
+      <text class="header-subtitle">{{reminderList.length}}条待办</text>
+    </view>
+    <image class="header-action" src="../../images/icons/question.svg" />
+    <image class="header-action" src="../../images/icons/share.svg" />
+  </view>
+
+  <view class="content">
+    <!-- 未完成的待办事项 -->
+    <view class="section">
+      <view 
+        class="reminder-item item-{{item.colorIndex}}" 
+        wx:for="{{reminderList}}" 
+        wx:key="_id"
+        wx:if="{{!item.isCompleted}}"
+      >
+        <view class="reminder-circle"></view>
+        <text class="reminder-title">{{item.title}}</text>
+      </view>
+    </view>
+
+    <!-- 已完成的待办事项 -->
+    <view class="section completed-section">
+      <view 
+        class="reminder-item completed" 
+        wx:for="{{reminderList}}" 
+        wx:key="_id"
+        wx:if="{{item.isCompleted}}"
+      >
+        <view class="reminder-circle checked"></view>
+        <text class="reminder-title">{{item.title}}</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{!loading && reminderList.length === 0}}">
+      <text class="empty-text">暂无待办事项</text>
+    </view>
+  </view>
+</view>
+
