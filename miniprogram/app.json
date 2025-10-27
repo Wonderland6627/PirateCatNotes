@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/reminder/index",
+    "pages/reminder-list/index",
     "pages/todo/index",
     "pages/temp/index",
     "pages/profile/index",
@@ -20,8 +20,8 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/todo/index",
-        "text": "待办",
+        "pagePath": "pages/reminder-list/index",
+        "text": "提醒",
         "iconPath": "images/icons/home.png",
         "selectedIconPath": "images/icons/home-active.png"
       },

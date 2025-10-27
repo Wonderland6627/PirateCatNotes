@@ -1,4 +1,4 @@
-/* pages/reminder/index.wxss */
+/* pages/reminder-list/index.wxss */
 .container {
   min-height: 100vh;
   background-color: #f5f5f5;

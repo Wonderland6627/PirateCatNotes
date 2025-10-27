@@ -1,6 +1,6 @@
-// pages/reminder/index.js - 提醒事项列表页面
+// pages/reminder-list/index.js - 提醒列表页面
 const logger = require('../../logger')
-const log = logger.create('reminder')
+const log = logger.create('reminder-list')
 const dataManager = require('../../utils/dataManager')
 
 Page({
@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    reminderList: [], // 提醒事项列表
+    reminderList: [], // 提醒列表
     loading: false // 是否正在加载
   },
 
@@ -21,12 +21,12 @@ Page({
       dataManager.init()
     }
     
-    // 加载提醒事项列表
+    // 加载提醒列表
     this.loadReminderList()
   },
 
   /**
-   * 加载提醒事项列表
+   * 加载提醒列表
    */
   async loadReminderList() {
     this.setData({
@@ -39,7 +39,7 @@ Page({
         await dataManager.init()
       }
 
-      // 获取提醒事项列表
+      // 获取提醒列表
       const list = await dataManager.getTodoList()
       
       // 格式化数据，添加颜色索引
@@ -58,7 +58,7 @@ Page({
         loading: false
       })
     } catch (error) {
-      log.error('加载提醒事项列表失败: ' + JSON.stringify(error))
+      log.error('加载提醒列表失败: ' + JSON.stringify(error))
       wx.showToast({
         title: '加载失败',
         icon: 'none'

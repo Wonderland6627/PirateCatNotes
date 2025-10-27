@@ -1,4 +1,4 @@
-<!--pages/reminder/index.wxml - 提醒事项列表页面-->
+<!--pages/reminder-list/index.wxml - 提醒列表页面-->
 <view class="container">
   <view class="header">
     <image class="header-icon" src="../../images/icons/home.png" />
