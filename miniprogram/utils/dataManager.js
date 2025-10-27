@@ -88,7 +88,9 @@ class DataManager {
         await userCollection.add({
           data: {
             nickName: null,
-            avatarUrl: null
+            avatarUrl: null,
+            createdAt: db.serverDate(),
+            updatedAt: db.serverDate(),
           }
         })
         log.info('创建未注册用户记录')
@@ -175,7 +177,8 @@ class DataManager {
         await userCollection.doc(docId).update({
           data: {
             nickName: userInfo.nickName,
-            avatarUrl: userInfo.avatarUrl
+            avatarUrl: userInfo.avatarUrl,
+            updatedAt: db.serverDate(),
           }
         })
         
