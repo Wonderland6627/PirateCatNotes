@@ -25,6 +25,13 @@ const CONSTANTS = {
   // 存储键名
   STORAGE_KEY: {
     USER_INFO: 'userInfo'
+  },
+
+  // 待办事项状态枚举
+  TODO_STATUS: {
+    PENDING: 'pending',     // 待提醒
+    REMINDED: 'reminded',   // 已提醒
+    COMPLETED: 'completed'  // 已完成
   }
 }
 

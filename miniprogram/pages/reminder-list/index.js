@@ -2,6 +2,7 @@
 const logger = require('../../logger')
 const log = logger.create('reminder-list')
 const dataManager = require('../../utils/dataManager')
+const CONSTANTS = require('../../config/constants')
 
 Page({
   /**
@@ -42,16 +43,65 @@ Page({
       // 获取提醒列表
       const list = await dataManager.getTodoList()
       
-      // 格式化数据，添加颜色索引
-      const formattedList = list.map((item, index) => ({
-        _id: item._id,
-        title: item.title,
-        description: item.description,
-        remindAt: item.remindAt ? this.formatDate(item.remindAt) : '',
-        status: item.status || 'pending',
-        isCompleted: item.status === 'completed',
-        colorIndex: (index % 4) + 1  // 循环使用4种颜色
-      }))
+      // 排序：按状态（pending在前）、临近时间、创建时间排序
+      const sortedList = [...list].sort((a, b) => {
+        const aStatus = a.status || CONSTANTS.TODO_STATUS.PENDING
+        const bStatus = b.status || CONSTANTS.TODO_STATUS.PENDING
+        const aIsPending = aStatus === CONSTANTS.TODO_STATUS.PENDING
+        const bIsPending = bStatus === CONSTANTS.TODO_STATUS.PENDING
+        
+        // 1. 首先按是否pending排序：pending在前
+        if (aIsPending !== bIsPending) {
+          return aIsPending ? -1 : 1  // pending在前
+        }
+        
+        // 2. 如果状态相同，按临近时间（remindAt）排序
+        const aRemindAt = a.remindAt ? new Date(a.remindAt).getTime() : 0
+        const bRemindAt = b.remindAt ? new Date(b.remindAt).getTime() : 0
+        
+        if (aRemindAt !== bRemindAt) {
+          return aRemindAt - bRemindAt  // 时间更早的在前
+        }
+        
+        // 3. 如果提醒时间相同，按创建时间（createdAt）排序
+        const aCreatedAt = a.createdAt ? new Date(a.createdAt).getTime() : 0
+        const bCreatedAt = b.createdAt ? new Date(b.createdAt).getTime() : 0
+        
+        return aCreatedAt - bCreatedAt  // 创建更早的在前
+      })
+      
+      // 格式化数据，添加颜色索引和分割线标识（只有pending状态才有颜色）
+      let pendingIndex = 0
+      const formattedList = sortedList.map((item, index) => {
+        const currentStatus = item.status || CONSTANTS.TODO_STATUS.PENDING
+        const isPending = currentStatus === CONSTANTS.TODO_STATUS.PENDING
+        const isCompleted = currentStatus === CONSTANTS.TODO_STATUS.COMPLETED
+        
+        // 只有pending状态才分配颜色
+        const colorIndex = isPending ? ((pendingIndex++ % 4) + 1) : 0
+        
+        // 判断是否需要显示分割线：当前项不是pending，但前一项是pending
+        let showDivider = false
+        if (!isPending && index > 0) {
+          const prevStatus = sortedList[index - 1].status || CONSTANTS.TODO_STATUS.PENDING
+          const prevIsPending = prevStatus === CONSTANTS.TODO_STATUS.PENDING
+          if (prevIsPending) {
+            showDivider = true
+          }
+        }
+        
+        return {
+          _id: item._id,
+          title: item.title,
+          description: item.description,
+          remindAt: item.remindAt ? this.formatDate(item.remindAt) : '',
+          status: currentStatus,
+          isPending: isPending,
+          isCompleted: isCompleted,
+          colorIndex: colorIndex,
+          showDivider: showDivider
+        }
+      })
 
       this.setData({
         reminderList: formattedList,

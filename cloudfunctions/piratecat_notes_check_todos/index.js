@@ -1,5 +1,6 @@
 // 云函数入口文件 - 定时检查提醒事项并发送订阅消息
 const cloud = require('wx-server-sdk')
+const { TODO_STATUS } = require('./constants')
 
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 
@@ -15,7 +16,7 @@ exports.main = async (event, context) => {
     const todos = await db.collection('piratecat_notes_todo')
       .where({
         remindAt: db.command.lte(now), // 提醒时间小于等于现在
-        status: 'pending' // 状态为待完成
+        status: TODO_STATUS.PENDING // 状态为待提醒
       })
       .get()
     
@@ -55,7 +56,7 @@ exports.main = async (event, context) => {
         // 更新事项状态为已发送
         await db.collection('piratecat_notes_todo').doc(todo._id).update({
           data: {
-            status: 'reminded', // 已提醒
+            status: TODO_STATUS.REMINDED, // 已提醒
             updatedAt: db.serverDate()
           }
         })

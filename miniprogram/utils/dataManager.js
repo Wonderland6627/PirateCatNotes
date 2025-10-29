@@ -238,7 +238,7 @@ class DataManager {
         description: todoData.description || '',
         remindAt: remindAt,
         creatorOpenID: this._openid,
-        status: 'pending', // 待提醒状态
+        status: CONSTANTS.TODO_STATUS.PENDING, // 待提醒状态
         createdAt: db.serverDate(),
         updatedAt: db.serverDate()
       }

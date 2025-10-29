@@ -11,30 +11,17 @@
   </view>
 
   <view class="content">
-    <!-- 未完成的待办事项 -->
+    <!-- 所有待办事项列表 -->
     <view class="section">
-      <view 
-        class="reminder-item item-{{item.colorIndex}}" 
-        wx:for="{{reminderList}}" 
-        wx:key="_id"
-        wx:if="{{!item.isCompleted}}"
-      >
-        <view class="reminder-circle"></view>
-        <text class="reminder-title">{{item.title}}</text>
-      </view>
-    </view>
-
-    <!-- 已完成的待办事项 -->
-    <view class="section completed-section">
-      <view 
-        class="reminder-item completed" 
-        wx:for="{{reminderList}}" 
-        wx:key="_id"
-        wx:if="{{item.isCompleted}}"
-      >
-        <view class="reminder-circle checked"></view>
-        <text class="reminder-title">{{item.title}}</text>
-      </view>
+      <block wx:for="{{reminderList}}" wx:key="_id">
+        <!-- 分割线：在彩色和灰色之间 -->
+        <view class="divider" wx:if="{{item.showDivider}}"></view>
+        
+        <view class="reminder-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}">
+          <view class="reminder-circle {{!item.isPending ? 'checked' : ''}}"></view>
+          <text class="reminder-title">{{item.title}}</text>
+        </view>
+      </block>
     </view>
 
     <!-- 空状态 -->
