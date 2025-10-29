@@ -1,10 +1,10 @@
-<!--pages/reminder-list/index.wxml - 提醒列表页面-->
+<!--pages/todo-list/index.wxml - 待办列表页面-->
 <view class="container">
   <view class="header">
     <image class="header-icon" src="../../images/icons/home.png" />
     <view class="header-info">
       <text class="header-title">待办</text>
-      <text class="header-subtitle">{{reminderList.length}}条待办</text>
+      <text class="header-subtitle">{{todoList.length}}条待办</text>
     </view>
     <image class="header-action" src="../../images/icons/question.svg" />
     <image class="header-action" src="../../images/icons/share.svg" />
@@ -13,24 +13,24 @@
   <view class="content">
     <!-- 所有待办事项列表 -->
     <view class="section">
-      <block wx:for="{{reminderList}}" wx:key="_id">
+      <block wx:for="{{todoList}}" wx:key="_id">
         <!-- 分割线：在彩色和灰色之间 -->
         <view class="divider" wx:if="{{item.showDivider}}"></view>
         
-        <view class="reminder-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}">
+        <view class="todo-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}">
           <view 
-            class="reminder-circle {{!item.isPending ? 'checked' : ''}}"
+            class="todo-circle {{!item.isPending ? 'checked' : ''}}"
             data-id="{{item._id}}"
             data-current-status="{{item.status}}"
             bindtap="onToggleTodoStatus"
           ></view>
-          <text class="reminder-title">{{item.title}}</text>
+          <text class="todo-title">{{item.title}}</text>
         </view>
       </block>
     </view>
 
     <!-- 空状态 -->
-    <view class="empty-state" wx:if="{{!loading && reminderList.length === 0}}">
+    <view class="empty-state" wx:if="{{!loading && todoList.length === 0}}">
       <text class="empty-text">暂无待办事项</text>
     </view>
   </view>

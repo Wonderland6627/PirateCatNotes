@@ -1,4 +1,4 @@
-/* pages/reminder-list/index.wxss */
+/* pages/todo-list/index.wxss */
 .container {
   width: 100%;
   min-height: 100vh;
@@ -55,7 +55,7 @@
   margin-bottom: 40rpx;
 }
 
-.reminder-item {
+.todo-item {
   display: flex;
   align-items: center;
   width: 100%;
@@ -68,33 +68,33 @@
   box-sizing: border-box;
 }
 
-.reminder-item.item-1 {
+.todo-item.item-1 {
   background: linear-gradient(135deg, #ff9ecf 0%, #ff84c4 100%);
   box-shadow: 0 4rpx 12rpx rgba(255, 158, 207, 0.3);
 }
 
-.reminder-item.item-2 {
+.todo-item.item-2 {
   background: linear-gradient(135deg, #a8e6cf 0%, #7dd3b0 100%);
   box-shadow: 0 4rpx 12rpx rgba(168, 230, 207, 0.3);
 }
 
-.reminder-item.item-3 {
+.todo-item.item-3 {
   background: linear-gradient(135deg, #ffd93d 0%, #ffc93c 100%);
   box-shadow: 0 4rpx 12rpx rgba(255, 217, 61, 0.3);
 }
 
-.reminder-item.item-4 {
+.todo-item.item-4 {
   background: linear-gradient(135deg, #b4e7f7 0%, #9dd5eb 100%);
   box-shadow: 0 4rpx 12rpx rgba(180, 231, 247, 0.3);
 }
 
-.reminder-item.gray {
+.todo-item.gray {
   background: #e8e8e8;
   box-shadow: none;
   opacity: 0.7;
 }
 
-.reminder-circle {
+.todo-circle {
   width: 40rpx;
   height: 40rpx;
   border: 3rpx solid #fff;
@@ -105,12 +105,12 @@
   cursor: pointer;
 }
 
-.reminder-circle.checked {
+.todo-circle.checked {
   background-color: #fff;
   border-color: #ddd;
 }
 
-.reminder-circle.checked::after {
+.todo-circle.checked::after {
   content: '✓';
   position: absolute;
   top: 50%;
@@ -121,18 +121,18 @@
   font-weight: bold;
 }
 
-.reminder-title {
+.todo-title {
   font-size: 32rpx;
   color: #fff;
   font-weight: 500;
   flex: 1;
 }
 
-.reminder-item.gray .reminder-title {
+.todo-item.gray .todo-title {
   color: #999;
 }
 
-.reminder-item.gray .reminder-circle {
+.todo-item.gray .todo-circle {
   border-color: #ccc;
 }
 

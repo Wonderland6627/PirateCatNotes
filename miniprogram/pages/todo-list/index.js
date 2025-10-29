@@ -1,6 +1,6 @@
-// pages/reminder-list/index.js - 提醒列表页面
+// pages/todo-list/index.js - 待办列表页面
 const logger = require('../../logger')
-const log = logger.create('reminder-list')
+const log = logger.create('todo-list')
 const dataManager = require('../../utils/dataManager')
 const CONSTANTS = require('../../config/constants')
 
@@ -9,7 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    reminderList: [], // 提醒列表
+    todoList: [], // 待办列表
     loading: false // 是否正在加载
   },
 
@@ -22,14 +22,14 @@ Page({
       dataManager.init()
     }
     
-    // 加载提醒列表
-    this.loadReminderList()
+    // 加载待办列表
+    this.loadTodoList()
   },
 
   /**
-   * 加载提醒列表
+   * 加载待办列表
    */
-  async loadReminderList() {
+  async loadTodoList() {
     this.setData({
       loading: true
     })
@@ -40,18 +40,18 @@ Page({
         await dataManager.init()
       }
 
-      // 获取提醒列表
+      // 获取待办列表
       const list = await dataManager.getTodoList()
       
       // 使用统一的排序和格式化方法
       const formattedList = this._sortAndFormatList(list)
 
       this.setData({
-        reminderList: formattedList,
+        todoList: formattedList,
         loading: false
       })
     } catch (error) {
-      log.error('加载提醒列表失败: ' + JSON.stringify(error))
+      log.error('加载待办列表失败: ' + JSON.stringify(error))
       wx.showToast({
         title: '加载失败',
         icon: 'none'
@@ -138,8 +138,8 @@ Page({
    * @param {string} newStatus - 新状态
    */
   _updateLocalTodoStatus(todoId, newStatus) {
-    const { reminderList } = this.data
-    const updatedList = reminderList.map(item => {
+    const { todoList } = this.data
+    const updatedList = todoList.map(item => {
       if (item._id === todoId) {
         const isPending = newStatus === CONSTANTS.TODO_STATUS.PENDING
         const isCompleted = newStatus === CONSTANTS.TODO_STATUS.COMPLETED
@@ -148,7 +148,7 @@ Page({
         let newColorIndex = item.colorIndex
         if (isPending && item.colorIndex === 0) {
           // 需要重新分配颜色，找到pending的数量
-          const pendingCount = reminderList.filter(i => 
+          const pendingCount = todoList.filter(i => 
             i.status === CONSTANTS.TODO_STATUS.PENDING && i._id !== todoId
           ).length
           newColorIndex = (pendingCount % 4) + 1
@@ -181,7 +181,7 @@ Page({
     }))
 
     this.setData({
-      reminderList: sortedList
+      todoList: sortedList
     })
   },
 
@@ -257,7 +257,7 @@ Page({
    * 下拉刷新
    */
   onPullDownRefresh() {
-    this.loadReminderList().then(() => {
+    this.loadTodoList().then(() => {
       wx.stopPullDownRefresh()
     })
   },
@@ -267,7 +267,7 @@ Page({
    */
   onShow() {
     // 每次显示时刷新列表
-    this.loadReminderList()
+    this.loadTodoList()
   }
 })
 
