@@ -276,6 +276,57 @@ class DataManager {
       return []
     }
   }
+
+  /**
+   * 更新待办事项状态
+   * @param {string} todoId - 待办事项ID
+   * @param {string} status - 新状态（使用 CONSTANTS.TODO_STATUS）
+   * @returns {Promise<boolean>} 是否更新成功
+   */
+  async updateTodoStatus(todoId, status) {
+    try {
+      if (!todoId) {
+        log.error('更新待办事项状态失败: todoId为空')
+        return false
+      }
+
+      if (!status || !Object.values(CONSTANTS.TODO_STATUS).includes(status)) {
+        log.error('更新待办事项状态失败: 无效的状态值 ' + status)
+        return false
+      }
+
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      // 检查待办事项是否属于当前用户
+      const queryResult = await todoCollection.doc(todoId).get()
+      
+      if (!queryResult.data) {
+        log.error('更新待办事项状态失败: 待办事项不存在 ' + todoId)
+        return false
+      }
+
+      const todo = queryResult.data
+      if (todo.creatorOpenID !== this._openid) {
+        log.error('更新待办事项状态失败: 无权操作此待办事项 ' + todoId)
+        return false
+      }
+
+      // 更新状态
+      await todoCollection.doc(todoId).update({
+        data: {
+          status: status,
+          updatedAt: db.serverDate()
+        }
+      })
+
+      log.info('更新待办事项状态成功: ' + todoId + ' -> ' + status)
+      return true
+    } catch (error) {
+      log.error('更新待办事项状态失败: ' + JSON.stringify(error))
+      return false
+    }
+  }
 }
 
 // 导出单例

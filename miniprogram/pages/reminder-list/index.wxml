@@ -18,7 +18,12 @@
         <view class="divider" wx:if="{{item.showDivider}}"></view>
         
         <view class="reminder-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}">
-          <view class="reminder-circle {{!item.isPending ? 'checked' : ''}}"></view>
+          <view 
+            class="reminder-circle {{!item.isPending ? 'checked' : ''}}"
+            data-id="{{item._id}}"
+            data-current-status="{{item.status}}"
+            bindtap="onToggleTodoStatus"
+          ></view>
           <text class="reminder-title">{{item.title}}</text>
         </view>
       </block>

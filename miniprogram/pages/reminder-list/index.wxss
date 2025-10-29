@@ -101,6 +101,8 @@
   border-radius: 50%;
   margin-right: 24rpx;
   position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .reminder-circle.checked {
