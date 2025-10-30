@@ -22,14 +22,14 @@
       {
         "pagePath": "pages/todo-list/index",
         "text": "提醒",
-        "iconPath": "images/icons/home.png",
-        "selectedIconPath": "images/icons/home-active.png"
+        "iconPath": "images/icons/tabs/todo_unselected.jpg",
+        "selectedIconPath": "images/icons/tabs/todo_selected.jpg"
       },
       {
         "pagePath": "pages/profile/index",
         "text": "我的",
-        "iconPath": "images/icons/usercenter.png",
-        "selectedIconPath": "images/icons/usercenter-active.png"
+        "iconPath": "images/icons/tabs/profile_unselected.jpg",
+        "selectedIconPath": "images/icons/tabs/profile_selected.jpg"
       }
     ]
   },
