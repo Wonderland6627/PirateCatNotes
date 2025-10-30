@@ -1,7 +1,7 @@
 // pages/todo-list/index.js - 待办列表页面
 const logger = require('../../logger')
 const log = logger.create('todo-list')
-const dataManager = require('../../utils/dataManager')
+const dataManager = require('../../dataManager')
 const CONSTANTS = require('../../config/constants')
 
 Page({

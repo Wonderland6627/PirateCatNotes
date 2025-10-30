@@ -1,6 +1,6 @@
 // app.js
 const logger = require('./logger.js')
-const dataManager = require('./utils/dataManager.js')
+const dataManager = require('./dataManager')
 
 App({
   onLaunch: function () {

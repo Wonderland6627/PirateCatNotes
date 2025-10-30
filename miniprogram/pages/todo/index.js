@@ -1,7 +1,7 @@
 // pages/todo/index.js - 创建提醒事项页面
 const logger = require('../../logger')
 const log = logger.create('todo')
-const dataManager = require('../../utils/dataManager')
+const dataManager = require('../../dataManager')
 
 Page({
   /**

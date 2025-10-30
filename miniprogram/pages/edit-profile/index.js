@@ -1,6 +1,6 @@
 // pages/edit-profile/index.js
 const logger = require('../../logger')
-const dataManager = require('../../utils/dataManager.js')
+const dataManager = require('../../dataManager')
 const commonUtils = require('../../utils/commonUtils.js')
 const CONSTANTS = require('../../config/constants')
 

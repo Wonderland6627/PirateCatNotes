@@ -1,6 +1,6 @@
 // utils/dataManager.js
-const logger = require('../logger')
-const CONSTANTS = require('../config/constants')
+const logger = require('./logger')
+const CONSTANTS = require('./config/constants')
 
 // 创建带标签的 logger
 const log = logger.create('dataManager')

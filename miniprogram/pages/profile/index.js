@@ -1,7 +1,7 @@
 // pages/profile/index.js
 const logger = require('../../logger')
 const USER_DEFAULTS = require('../../config/userDefaults.js')
-const dataManager = require('../../utils/dataManager.js')
+const dataManager = require('../../dataManager')
 
 Page({
 
