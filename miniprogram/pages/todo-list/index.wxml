@@ -8,9 +8,35 @@
     </view>
     <image class="header-action" src="../../images/icons/question.svg" />
     <image class="header-action" src="../../images/icons/share.svg" />
+    <view class="header-create-btn" bindtap="onShowCreateInput">
+      <text class="create-btn-text">+</text>
+    </view>
   </view>
 
   <view class="content">
+    <!-- 创建输入框 -->
+    <view class="create-container" wx:if="{{showCreateInput}}">
+      <view class="create-input-wrapper">
+        <textarea 
+          class="create-input" 
+          placeholder="输入待办内容"
+          value="{{newTodoContent}}"
+          bindinput="onInputChange"
+          focus="{{showCreateInput}}"
+          auto-height="{{false}}"
+          maxlength="{{500}}"
+        ></textarea>
+      </view>
+      <view class="create-buttons">
+        <view class="create-cancel-btn" catchtap="onCancelCreate">
+          <text class="cancel-btn-text">取消</text>
+        </view>
+        <view class="create-complete-btn" catchtap="onCreateTodoComplete">
+          <text class="complete-btn-text">完成</text>
+        </view>
+      </view>
+    </view>
+
     <!-- 所有待办事项列表 -->
     <view class="section">
       <block wx:for="{{todoList}}" wx:key="_id">

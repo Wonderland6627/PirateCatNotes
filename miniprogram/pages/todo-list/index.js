@@ -10,7 +10,9 @@ Page({
    */
   data: {
     todoList: [], // 待办列表
-    loading: false // 是否正在加载
+    loading: false, // 是否正在加载
+    showCreateInput: false, // 是否显示创建输入框
+    newTodoContent: '' // 新建待办的内容
   },
 
   /**
@@ -268,6 +270,114 @@ Page({
   onShow() {
     // 每次显示时刷新列表
     this.loadTodoList()
+  },
+
+  /**
+   * 显示创建输入框
+   */
+  onShowCreateInput() {
+    this.setData({
+      showCreateInput: true,
+      newTodoContent: ''
+    })
+  },
+
+  /**
+   * 输入框内容变化
+   */
+  onInputChange(e) {
+    this.setData({
+      newTodoContent: e.detail.value
+    })
+  },
+
+  /**
+   * 取消创建
+   */
+  onCancelCreate() {
+    this.setData({
+      showCreateInput: false,
+      newTodoContent: ''
+    })
+  },
+
+  /**
+   * 完成创建待办
+   */
+  async onCreateTodoComplete() {
+    log.info('onCreateTodoComplete called')
+    const { newTodoContent, showCreateInput } = this.data
+    log.info('newTodoContent: ' + newTodoContent + ', showCreateInput: ' + showCreateInput)
+
+    // 如果没有内容，关闭输入框
+    if (!newTodoContent || !newTodoContent.trim()) {
+      log.info('Content is empty, closing input')
+      this.setData({
+        showCreateInput: false,
+        newTodoContent: ''
+      })
+      return
+    }
+
+    // 防止重复提交
+    if (this._creatingTodo) {
+      return
+    }
+    this._creatingTodo = true
+
+    // 检查数据中心是否已初始化
+    if (!dataManager.isInitialized()) {
+      await dataManager.init()
+    }
+
+    wx.showLoading({
+      title: '创建中...',
+      mask: true
+    })
+
+    try {
+      // 准备提交的数据（简化版本，只需要content，remindAt可以为空）
+      const todoDataToSubmit = {
+        content: newTodoContent.trim(),
+        description: '',
+        remindAt: null // 快速创建不设置提醒时间
+      }
+      
+      // 创建待办事项
+      const success = await dataManager.createTodo(todoDataToSubmit)
+
+      wx.hideLoading()
+
+      if (success) {
+        // 关闭输入框并清空内容
+        this.setData({
+          showCreateInput: false,
+          newTodoContent: ''
+        })
+
+        // 刷新列表
+        await this.loadTodoList()
+
+        wx.showToast({
+          title: '创建成功',
+          icon: 'success'
+        })
+      } else {
+        wx.showToast({
+          title: '创建失败',
+          icon: 'none'
+        })
+      }
+    } catch (error) {
+      wx.hideLoading()
+      log.error('创建待办事项异常: ' + JSON.stringify(error))
+      wx.showToast({
+        title: '创建失败',
+        icon: 'none'
+      })
+    } finally {
+      this._creatingTodo = false
+    }
   }
 })
 
