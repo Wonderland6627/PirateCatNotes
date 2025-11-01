@@ -16,8 +16,8 @@
         class="input" 
         placeholder="请输入提醒事项标题" 
         maxlength="50"
-        value="{{title}}"
-        bindinput="onTitleInput"
+        value="{{content}}"
+        bindinput="onContentInput"
       />
     </view>
 

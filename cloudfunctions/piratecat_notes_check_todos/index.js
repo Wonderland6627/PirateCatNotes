@@ -37,7 +37,7 @@ exports.main = async (event, context) => {
       try {
         // 准备订阅消息数据
         const messageData = {
-          thing2: { value: todo.title }, // 提醒内容（事项标题）
+          thing2: { value: todo.content }, // 提醒内容（事项标题）
           date4: { value: formatDateTime(todo.remindAt) }, // 日程时间
           thing24: { value: '系统提醒' }, // 参加人
           thing11: { value: todo.description || '请及时处理' } // 备注

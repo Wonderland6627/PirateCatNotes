@@ -37,7 +37,7 @@
 ### 2. piratecat_notes_todo（事项表）
 | 字段名 | 类型 | 说明 |
 |--------|------|------|
-| title | String | 事项标题 |
+| content | String | 事项标题 |
 | description | String | 事项详细描述 |
 | remindAt | Date | 提醒时间 |
 | creatorOpenID | String | 创建者openid（关联User表） |

@@ -24,7 +24,7 @@
             data-current-status="{{item.status}}"
             bindtap="onToggleTodoStatus"
           ></view>
-          <text class="todo-title">{{item.title}}</text>
+          <text class="todo-title">{{item.content}}</text>
         </view>
       </block>
     </view>

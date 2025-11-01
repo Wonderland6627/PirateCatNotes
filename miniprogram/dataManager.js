@@ -215,7 +215,7 @@ class DataManager {
 
   /**
    * 创建提醒事项
-   * @param {Object} todoData - 提醒事项数据 { title, description, remindAt }
+   * @param {Object} todoData - 提醒事项数据 { content, description, remindAt }
    * @returns {Promise<boolean>} 是否创建成功
    */
   async createTodo(todoData) {
@@ -234,7 +234,7 @@ class DataManager {
       
       // 准备要保存的数据
       const dataToSave = {
-        title: todoData.title,
+        content: todoData.content,
         description: todoData.description || '',
         remindAt: remindAt,
         creatorOpenID: this._openid,

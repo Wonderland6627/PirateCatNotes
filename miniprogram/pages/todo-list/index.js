@@ -172,7 +172,7 @@ Page({
       // 恢复原始数据结构以便排序
       return {
         _id: item._id,
-        title: item.title,
+        content: item.content,
         description: item.description,
         remindAt: item.remindAt,
         status: item.status,
@@ -240,7 +240,7 @@ Page({
       
       return {
         _id: item._id,
-        title: item.title,
+        content: item.content,
         description: item.description,
         remindAt: item.remindAt ? this.formatDate(item.remindAt) : '',
         status: currentStatus,

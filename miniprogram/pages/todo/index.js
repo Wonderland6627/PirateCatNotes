@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    title: '', // 标题
+    content: '', // 内容
     description: '', // 事项描述
     remindDate: '', // 提醒日期
     remindTime: '', // 提醒时间
@@ -27,11 +27,11 @@ Page({
   },
 
   /**
-   * 标题输入处理
+   * 内容输入处理
    */
-  onTitleInput(e) {
+  onContentInput(e) {
     this.setData({
-      title: e.detail.value
+      content: e.detail.value
     })
   },
 
@@ -66,7 +66,7 @@ Page({
    * 创建提醒事项
    */
   async onCreateTodo() {
-    const { title, description, remindDate, remindTime, submitting } = this.data
+    const { content, description, remindDate, remindTime, submitting } = this.data
 
     // 防止重复提交
     if (submitting) {
@@ -74,9 +74,9 @@ Page({
     }
 
     // 验证必填项
-    if (!title.trim()) {
+    if (!content.trim()) {
       wx.showToast({
-        title: '请输入标题',
+        title: '请输入内容',
         icon: 'none'
       })
       return
@@ -143,7 +143,7 @@ Page({
     try {
       // 准备提交的数据
       const todoDataToSubmit = {
-        title: title.trim(),
+        content: content.trim(),
         description: description.trim(),
         remindAt: remindDateTime
       }
@@ -161,7 +161,7 @@ Page({
 
         // 清空表单
         this.setData({
-          title: '',
+          content: '',
           description: '',
           remindDate: '',
           remindTime: '',
