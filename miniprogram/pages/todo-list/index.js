@@ -240,9 +240,12 @@ Page({
         }
       }
       
+      // 处理content中的换行符，替换为空格以确保单行显示
+      const displayContent = item.content ? item.content.replace(/\n/g, ' ') : ''
+      
       return {
         _id: item._id,
-        content: item.content,
+        content: displayContent,
         description: item.description,
         remindAt: item.remindAt ? this.formatDate(item.remindAt) : '',
         status: currentStatus,
