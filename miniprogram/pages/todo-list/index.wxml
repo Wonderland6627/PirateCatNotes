@@ -26,6 +26,7 @@
           auto-height="{{false}}"
           maxlength="{{500}}"
         ></textarea>
+        <image class="create-todo-icon" src="../../images/todo_list/create_todo_icon.png" mode="aspectFit"></image>
       </view>
       <view class="create-buttons">
         <view class="create-cancel-btn" catchtap="onCancelCreate">
