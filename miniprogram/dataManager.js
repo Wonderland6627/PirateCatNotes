@@ -269,6 +269,7 @@ class DataManager {
       const result = await todoCollection.where({
         creatorOpenID: this._openid
       }).orderBy('remindAt', 'asc').get()
+      log.info('获取提醒事项列表成功: ' + JSON.stringify(result.data))
       
       return result.data
     } catch (error) {

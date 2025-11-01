@@ -276,9 +276,17 @@ Page({
    * 显示创建输入框
    */
   onShowCreateInput() {
+    log.info('onShowCreateInput called, current showCreateInput: ' + this.data.showCreateInput)
+    // 如果正在创建中，不允许打开
+    if (this._creatingTodo) {
+      log.info('Creating todo in progress, ignore')
+      return
+    }
     this.setData({
       showCreateInput: true,
       newTodoContent: ''
+    }, () => {
+      log.info('showCreateInput set to true')
     })
   },
 
@@ -349,14 +357,14 @@ Page({
       wx.hideLoading()
 
       if (success) {
+        // 刷新列表
+        await this.loadTodoList()
+
         // 关闭输入框并清空内容
         this.setData({
           showCreateInput: false,
           newTodoContent: ''
         })
-
-        // 刷新列表
-        await this.loadTodoList()
 
         wx.showToast({
           title: '创建成功',
