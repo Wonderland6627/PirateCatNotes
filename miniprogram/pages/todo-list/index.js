@@ -3,6 +3,8 @@ const logger = require('../../logger')
 const log = logger.create('todo-list')
 const dataManager = require('../../dataManager')
 const CONSTANTS = require('../../config/constants')
+const dateUtils = require('../../utils/dateUtils')
+const commonUtils = require('../../utils/commonUtils')
 
 Page({
   /**
@@ -62,28 +64,6 @@ Page({
         loading: false
       })
     }
-  },
-
-  /**
-   * 格式化日期
-   */
-  formatDate(dateStr) {
-    if (!dateStr) return ''
-    
-    // 如果是字符串，直接返回
-    if (typeof dateStr === 'string') {
-      return dateStr
-    }
-    
-    // 如果是 Date 对象或时间戳
-    const date = new Date(dateStr)
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const hour = String(date.getHours()).padStart(2, '0')
-    const minute = String(date.getMinutes()).padStart(2, '0')
-    
-    return `${year}-${month}-${day} ${hour}:${minute}`
   },
 
   /**
@@ -206,16 +186,16 @@ Page({
       }
       
       // 2. 如果状态相同，按临近时间（remindAt）排序
-      const aRemindAt = a.remindAt ? new Date(a.remindAt).getTime() : 0
-      const bRemindAt = b.remindAt ? new Date(b.remindAt).getTime() : 0
+      const aRemindAt = a.remindAt ? dateUtils.safeParseDate(a.remindAt)?.getTime() || 0 : 0
+      const bRemindAt = b.remindAt ? dateUtils.safeParseDate(b.remindAt)?.getTime() || 0 : 0
       
       if (aRemindAt !== bRemindAt) {
         return aRemindAt - bRemindAt  // 时间更早的在前
       }
       
       // 3. 如果提醒时间相同，按创建时间（createdAt）排序
-      const aCreatedAt = a.createdAt ? new Date(a.createdAt).getTime() : 0
-      const bCreatedAt = b.createdAt ? new Date(b.createdAt).getTime() : 0
+      const aCreatedAt = a.createdAt ? dateUtils.safeParseDate(a.createdAt)?.getTime() || 0 : 0
+      const bCreatedAt = b.createdAt ? dateUtils.safeParseDate(b.createdAt)?.getTime() || 0 : 0
       
       return aCreatedAt - bCreatedAt  // 创建更早的在前
     })
@@ -241,13 +221,13 @@ Page({
       }
       
       // 处理content中的换行符，替换为空格以确保单行显示
-      const displayContent = item.content ? item.content.replace(/\n/g, ' ') : ''
+      const displayContent = commonUtils.replaceNewlines(item.content || '', ' ')
       
       return {
         _id: item._id,
         content: displayContent,
         description: item.description,
-        remindAt: item.remindAt ? this.formatDate(item.remindAt) : '',
+        remindAt: item.remindAt ? dateUtils.formatDate(item.remindAt) : '',
         status: currentStatus,
         isPending: isPending,
         isCompleted: isCompleted,
