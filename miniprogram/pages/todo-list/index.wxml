@@ -44,14 +44,20 @@
         <!-- 分割线：在彩色和灰色之间 -->
         <view class="divider" wx:if="{{item.showDivider}}"></view>
         
-        <view class="todo-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}">
+        <view 
+          class="todo-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}"
+          data-id="{{item._id}}"
+          bindtap="onTodoItemTap"
+        >
           <view 
             class="todo-circle {{!item.isPending ? 'checked' : ''}}"
             data-id="{{item._id}}"
             data-current-status="{{item.status}}"
-            bindtap="onToggleTodoStatus"
+            catchtap="onToggleTodoStatus"
           ></view>
-          <text class="todo-title">{{item.content}}</text>
+          <view class="todo-content">
+            <text class="todo-title">{{item.content}}</text>
+          </view>
         </view>
       </block>
     </view>

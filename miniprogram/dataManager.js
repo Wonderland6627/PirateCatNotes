@@ -281,6 +281,37 @@ class DataManager {
   }
 
   /**
+   * 根据ID获取单个待办事项详情
+   * @param {string} todoId - 待办事项ID
+   * @returns {Promise<Object|null>} 待办事项详情，不存在返回null
+   */
+  async getTodoById(todoId) {
+    try {
+      if (!todoId) {
+        log.error('获取待办事项详情失败: todoId为空')
+        return null
+      }
+
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      // 查询待办事项
+      const result = await todoCollection.doc(todoId).get()
+      
+      if (!result.data) {
+        log.error('获取待办事项详情失败: 待办事项不存在 ' + todoId)
+        return null
+      }
+
+      log.info('获取待办事项详情成功: ' + todoId)
+      return result.data
+    } catch (error) {
+      log.error('获取待办事项详情失败: ' + JSON.stringify(error))
+      return null
+    }
+  }
+
+  /**
    * 更新待办事项状态
    * @param {string} todoId - 待办事项ID
    * @param {string} status - 新状态（使用 CONSTANTS.TODO_STATUS）
