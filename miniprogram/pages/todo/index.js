@@ -2,6 +2,7 @@
 const logger = require('../../logger')
 const log = logger.create('todo')
 const dataManager = require('../../dataManager')
+const dateUtils = require('../../utils/dateUtils')
 
 Page({
   /**
@@ -90,8 +91,15 @@ Page({
       return
     }
 
-    // 合并日期和时间
-    const remindDateTime = remindTime ? `${remindDate} ${remindTime}` : remindDate + ' 00:00'
+    // 合并日期和时间，直接生成 Date 对象
+    const remindAt = dateUtils.combineDateAndTime(remindDate, remindTime)
+    if (!remindAt) {
+      wx.showToast({
+        title: '日期时间格式错误',
+        icon: 'none'
+      })
+      return
+    }
 
     // 检查数据中心是否已初始化
     if (!dataManager.isInitialized()) {
@@ -145,7 +153,7 @@ Page({
       const todoDataToSubmit = {
         content: content.trim(),
         description: description.trim(),
-        remindAt: remindDateTime
+        remindAt: remindAt
       }
       
       // 创建提醒事项

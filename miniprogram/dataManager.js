@@ -1,6 +1,7 @@
 // utils/dataManager.js
 const logger = require('./logger')
 const CONSTANTS = require('./config/constants')
+const dateUtils = require('./utils/dateUtils')
 
 // 创建带标签的 logger
 const log = logger.create('dataManager')
@@ -223,13 +224,14 @@ class DataManager {
       const db = wx.cloud.database()
       const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
       
-      // 将 remindAt 字符串转换为 Date 对象
-      // 格式: "YYYY-MM-DD HH:mm" (如 "2024-01-15 14:30")
+      // 统一使用 dateUtils 解析日期时间（支持 Date 对象、字符串、时间戳等）
       let remindAt = null
       if (todoData.remindAt) {
-        // 替换 - 为 / 以便 Date 解析
-        const dateStr = todoData.remindAt.replace(/-/g, '/')
-        remindAt = new Date(dateStr)
+        remindAt = dateUtils.safeParseDate(todoData.remindAt)
+        if (!remindAt) {
+          log.error('创建提醒事项失败: 无法解析提醒时间 ' + JSON.stringify(todoData.remindAt))
+          return false
+        }
       }
       
       // 准备要保存的数据

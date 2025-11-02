@@ -120,10 +120,26 @@ function formatTimeOnly(dateStr) {
   return `${hour}:${minute}`
 }
 
+/**
+ * 合并日期和时间字符串为 Date 对象
+ * @param {string} dateStr - 日期字符串，格式 "yyyy-MM-dd"
+ * @param {string} timeStr - 时间字符串，格式 "HH:mm"，可选
+ * @returns {Date|null} Date 对象，解析失败返回 null
+ */
+function combineDateAndTime(dateStr, timeStr) {
+  if (!dateStr) return null
+  
+  // 如果提供了时间，合并日期和时间；否则使用当天的 00:00
+  const dateTimeStr = timeStr ? `${dateStr} ${timeStr}` : `${dateStr} 00:00`
+  
+  return safeParseDate(dateTimeStr)
+}
+
 module.exports = {
   safeParseDate,
   formatDate,
   formatDateOnly,
-  formatTimeOnly
+  formatTimeOnly,
+  combineDateAndTime
 }
 
