@@ -312,6 +312,82 @@ class DataManager {
   }
 
   /**
+   * 更新待办事项
+   * @param {string} todoId - 待办事项ID
+   * @param {Object} todoData - 待更新的数据 { content, description, remindAt, status }
+   * @returns {Promise<boolean>} 是否更新成功
+   */
+  async updateTodo(todoId, todoData) {
+    try {
+      if (!todoId) {
+        log.error('更新待办事项失败: todoId为空')
+        return false
+      }
+
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      // 检查待办事项是否属于当前用户
+      const queryResult = await todoCollection.doc(todoId).get()
+      
+      if (!queryResult.data) {
+        log.error('更新待办事项失败: 待办事项不存在 ' + todoId)
+        return false
+      }
+
+      const todo = queryResult.data
+      if (todo.creatorOpenID !== this._openid) {
+        log.error('更新待办事项失败: 无权操作此待办事项 ' + todoId)
+        return false
+      }
+
+      // 准备更新数据
+      const updateData = {
+        updatedAt: db.serverDate()
+      }
+
+      // 解析并更新字段
+      if (todoData.content !== undefined) {
+        updateData.content = todoData.content
+      }
+      if (todoData.description !== undefined) {
+        updateData.description = todoData.description || ''
+      }
+      if (todoData.remindAt !== undefined) {
+        // 统一使用 dateUtils 解析日期时间
+        if (todoData.remindAt) {
+          const remindAt = dateUtils.safeParseDate(todoData.remindAt)
+          if (!remindAt) {
+            log.error('更新待办事项失败: 无法解析提醒时间 ' + JSON.stringify(todoData.remindAt))
+            return false
+          }
+          updateData.remindAt = remindAt
+        } else {
+          updateData.remindAt = null
+        }
+      }
+      if (todoData.status !== undefined) {
+        if (!Object.values(CONSTANTS.TODO_STATUS).includes(todoData.status)) {
+          log.error('更新待办事项失败: 无效的状态值 ' + todoData.status)
+          return false
+        }
+        updateData.status = todoData.status
+      }
+
+      // 更新数据
+      await todoCollection.doc(todoId).update({
+        data: updateData
+      })
+
+      log.info('更新待办事项成功: ' + todoId + ' ' + JSON.stringify(updateData))
+      return true
+    } catch (error) {
+      log.error('更新待办事项失败: ' + JSON.stringify(error))
+      return false
+    }
+  }
+
+  /**
    * 更新待办事项状态
    * @param {string} todoId - 待办事项ID
    * @param {string} status - 新状态（使用 CONSTANTS.TODO_STATUS）

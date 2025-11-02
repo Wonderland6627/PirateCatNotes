@@ -32,6 +32,11 @@ const CONSTANTS = {
     PENDING: 'pending',     // 待提醒
     REMINDED: 'reminded',   // 已提醒
     COMPLETED: 'completed'  // 已完成
+  },
+
+  // 订阅消息模板ID
+  SUBSCRIBE_MESSAGE: {
+    REMINDER_TEMPLATE_ID: 'IiYABIcxdWwaAbqXPb71Yijw-iYMRlbRpghZCT58eQ8' // 日程提醒模板ID
   }
 }
 
