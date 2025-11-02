@@ -2,6 +2,23 @@
 const logger = require('./logger.js')
 const dataManager = require('./dataManager')
 
+/**
+ * 判断是否在编辑器或测试模式下
+ * @returns {boolean} 如果在开发/测试环境返回 true，否则返回 false
+ */
+function isDevOrTestMode() {
+  try {
+    // 通过账号信息判断环境：develop(开发版)、trial(体验版)、release(正式版)
+    const accountInfo = wx.getAccountInfoSync()
+    const envVersion = accountInfo.miniProgram.envVersion
+    // 开发版和体验版都显示时间戳，正式版不显示
+    return envVersion === 'develop' || envVersion === 'trial'
+  } catch (e) {
+    // 如果获取账号信息失败，可能是开发者工具环境，默认显示时间戳
+    return true
+  }
+}
+
 App({
   onLaunch: function () {
     if (!wx.cloud) {
@@ -26,6 +43,7 @@ App({
   },
 
   globalData: {
-    dataManager: dataManager
+    dataManager: dataManager,
+    isDevOrTestMode: isDevOrTestMode
   }
 });
