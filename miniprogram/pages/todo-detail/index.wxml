@@ -6,20 +6,10 @@
   </view>
 
   <!-- 详情内容 -->
-  <view class="detail-container" wx:else>
-    <view class="header">
-      <text class="header-title">待办详情</text>
-    </view>
-
-    <view class="detail-content">
-      <!-- 标题 -->
-      <view class="detail-item">
-        <view class="detail-label">
-          <text class="label-text">标题</text>
-        </view>
-        <view class="detail-value">
-          <text class="value-text">{{content}}</text>
-        </view>
+  <view class="detail-content" wx:else>
+      <!-- 标题 - 突出显示 -->
+      <view class="detail-item title-item">
+        <view class="title-text">{{content}}</view>
       </view>
 
       <!-- 事项描述 -->
@@ -77,6 +67,5 @@
         </view>
       </view>
     </view>
-  </view>
 </view>
 

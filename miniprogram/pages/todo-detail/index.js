@@ -20,7 +20,8 @@ Page({
     remindTime: '', // 提醒时间（格式化）
     status: '', // 状态
     createdAt: '', // 创建时间（格式化）
-    updatedAt: '' // 更新时间（格式化）
+    updatedAt: '', // 更新时间（格式化）
+    isFirstLoad: true // 是否首次加载
   },
 
   /**
@@ -47,11 +48,17 @@ Page({
     }
 
     this.setData({
-      todoId: todoId
+      todoId: todoId,
+      isFirstLoad: true
     })
 
     // 加载待办事项详情
     await this.loadTodoDetail()
+    
+    // 标记首次加载完成
+    this.setData({
+      isFirstLoad: false
+    })
   },
 
   /**
@@ -130,19 +137,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    // 每次显示时刷新详情（可能从编辑页面返回）
-    if (this.data.todoId) {
+    // 如果不是首次加载，则刷新详情（可能从编辑页面返回或其他页面返回）
+    if (this.data.todoId && !this.data.isFirstLoad) {
       this.loadTodoDetail()
     }
-  },
-
-  /**
-   * 下拉刷新
-   */
-  onPullDownRefresh() {
-    this.loadTodoDetail().then(() => {
-      wx.stopPullDownRefresh()
-    })
   }
 })
 
