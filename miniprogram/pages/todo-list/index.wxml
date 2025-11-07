@@ -32,7 +32,7 @@
         <view class="create-cancel-btn" catchtap="onCancelCreate">
           <text class="cancel-btn-text">取消</text>
         </view>
-        <view class="create-complete-btn" catchtap="onCreateTodoComplete">
+        <view class="create-complete-btn" style="{{createBtnStyle}}" catchtap="onCreateTodoComplete">
           <text class="complete-btn-text">完成</text>
         </view>
       </view>
@@ -45,7 +45,8 @@
         <view class="divider" wx:if="{{item.showDivider}}"></view>
         
         <view 
-          class="todo-item {{item.isPending ? 'item-' + item.colorIndex : 'gray'}}"
+          class="todo-item {{!item.isPending ? 'gray' : ''}}"
+          style="{{item.itemStyle}}"
           data-id="{{item._id}}"
           bindtap="onTodoItemTap"
         >

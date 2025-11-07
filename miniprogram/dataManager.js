@@ -241,6 +241,7 @@ class DataManager {
         remindAt: remindAt,
         creatorOpenID: this._openid,
         status: CONSTANTS.TODO_STATUS.PENDING, // 待提醒状态
+        color: todoData.color || CONSTANTS.TODO_DEFAULT_COLOR, // 使用默认颜色
         createdAt: db.serverDate(),
         updatedAt: db.serverDate()
       }
@@ -384,6 +385,9 @@ class DataManager {
       }
       if (todoData.remindAt !== undefined) {
         updateData.remindAt = remindAt
+      }
+      if (todoData.color !== undefined) {
+        updateData.color = todoData.color
       }
 
       // 更新数据

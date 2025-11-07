@@ -40,6 +40,7 @@
 | content | String | 事项标题 |
 | description | String | 事项详细描述 |
 | remindAt | Date | 提醒时间 |
+| color | number | 提醒颜色 |
 | creatorOpenID | String | 创建者openid（关联User表） |
 | createdAt | Date | 创建时间 |
 | updatedAt | Date | 更新时间 |

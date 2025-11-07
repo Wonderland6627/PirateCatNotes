@@ -49,11 +49,28 @@
         <view class="cell-value {{!remindTime ? 'placeholder' : ''}}">{{remindTime || '选择时间'}}</view>
       </picker>
     </view>
+
+    <!-- 颜色选择 -->
+    <view class="cell cell-color">
+      <view class="cell-label">颜色</view>
+      <view class="color-options">
+        <view 
+          wx:for="{{colorOptions}}" 
+          wx:key="value"
+          class="color-option {{selectedColor === item.value ? 'selected' : ''}}"
+          data-color="{{item.value}}"
+          bindtap="onColorSelect"
+        >
+          <view class="color-circle" style="background: {{item.gradient}}"></view>
+          <view class="color-check" wx:if="{{selectedColor === item.value}}">✓</view>
+        </view>
+      </view>
+    </view>
   </view>
 
   <!-- 完成按钮 -->
   <view class="footer">
-    <view class="save-btn" bindtap="onSave">
+    <view class="save-btn" style="{{saveBtnStyle}}" bindtap="onSave">
       <text class="save-btn-text">完成</text>
     </view>
   </view>

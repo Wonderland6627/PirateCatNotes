@@ -3,6 +3,7 @@ const logger = require('../../logger')
 const log = logger.create('todo-edit')
 const dataManager = require('../../dataManager')
 const dateUtils = require('../../utils/dateUtils')
+const CONSTANTS = require('../../config/constants')
 
 Page({
   /**
@@ -14,6 +15,9 @@ Page({
     description: '', // 备注
     remindDate: '', // 提醒日期（yyyy-MM-dd格式）
     remindTime: '', // 提醒时间（HH:mm格式）
+    selectedColor: CONSTANTS.TODO_DEFAULT_COLOR, // 选中的颜色索引
+    colorOptions: Object.values(CONSTANTS.TODO_COLORS), // 从常量中获取颜色选项
+    saveBtnStyle: '', // 完成按钮样式
     loading: false // 是否正在加载
   },
 
@@ -74,12 +78,18 @@ Page({
         remindTime = dateUtils.formatTimeOnly(todo.remindAt)
       }
 
+      // 解析颜色（使用默认颜色）
+      const selectedColor = todo.color || CONSTANTS.TODO_DEFAULT_COLOR
+      const colorConfig = CONSTANTS.TODO_COLORS[selectedColor]
+
       this.setData({
         todoId: todoId,
         content: todo.content || '',
         description: todo.description || '',
         remindDate: remindDate,
         remindTime: remindTime,
+        selectedColor: selectedColor,
+        saveBtnStyle: `background: ${colorConfig.gradient}; box-shadow: 0 4rpx 12rpx ${colorConfig.shadowColor};`,
         loading: false
       })
     } catch (error) {
@@ -131,10 +141,22 @@ Page({
   },
 
   /**
+   * 选择颜色
+   */
+  onColorSelect(e) {
+    const { color } = e.currentTarget.dataset
+    const colorConfig = CONSTANTS.TODO_COLORS[color]
+    this.setData({
+      selectedColor: color,
+      saveBtnStyle: `background: ${colorConfig.gradient}; box-shadow: 0 4rpx 12rpx ${colorConfig.shadowColor};`
+    })
+  },
+
+  /**
    * 保存待办事项
    */
   async onSave() {
-    const { todoId, content, description, remindDate, remindTime } = this.data
+    const { todoId, content, description, remindDate, remindTime, selectedColor } = this.data
 
     // 防止重复提交
     if (this._saving) {
@@ -153,7 +175,8 @@ Page({
       const updateData = {
         content: content.trim(),
         description: description.trim(),
-        remindAt: remindAt
+        remindAt: remindAt,
+        color: selectedColor
       }
 
       wx.showLoading({

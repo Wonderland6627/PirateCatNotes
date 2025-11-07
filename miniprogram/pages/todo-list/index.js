@@ -14,7 +14,8 @@ Page({
     todoList: [], // 待办列表
     loading: false, // 是否正在加载
     showCreateInput: false, // 是否显示创建输入框
-    newTodoContent: '' // 新建待办的内容
+    newTodoContent: '', // 新建待办的内容
+    createBtnStyle: '' // 创建按钮样式
   },
 
   /**
@@ -25,6 +26,12 @@ Page({
     if (!dataManager.isInitialized()) {
       dataManager.init()
     }
+    
+    // 初始化创建按钮样式（使用默认颜色）
+    const defaultColorConfig = CONSTANTS.TODO_COLORS[CONSTANTS.TODO_DEFAULT_COLOR]
+    this.setData({
+      createBtnStyle: `background: ${defaultColorConfig.gradient}; box-shadow: 0 2rpx 6rpx ${defaultColorConfig.shadowColor};`
+    })
     
     // 加载待办列表
     this.loadTodoList()
@@ -126,16 +133,16 @@ Page({
         const isPending = newStatus === CONSTANTS.TODO_STATUS.PENDING
         const isCompleted = newStatus === CONSTANTS.TODO_STATUS.COMPLETED
         
-        // 重新计算颜色索引（如果状态变为pending需要分配颜色）
-        let newColorIndex = item.colorIndex
-        if (isPending && item.colorIndex === 0) {
-          // 需要重新分配颜色，找到pending的数量
-          const pendingCount = todoList.filter(i => 
-            i.status === CONSTANTS.TODO_STATUS.PENDING && i._id !== todoId
-          ).length
-          newColorIndex = (pendingCount % 4) + 1
-        } else if (!isPending) {
-          newColorIndex = 0
+        // 使用数据库中的 color 字段，如果没有则使用默认颜色（只有pending状态才有颜色）
+        const newColorIndex = isPending ? (item.color || CONSTANTS.TODO_DEFAULT_COLOR) : 0
+        
+        // 生成样式字符串（只有pending状态才有颜色样式）
+        let itemStyle = ''
+        if (isPending && newColorIndex > 0) {
+          const colorConfig = CONSTANTS.TODO_COLORS[newColorIndex]
+          if (colorConfig) {
+            itemStyle = `background: ${colorConfig.gradient}; box-shadow: 0 4rpx 12rpx ${colorConfig.shadowColor};`
+          }
         }
 
         return {
@@ -143,7 +150,8 @@ Page({
           status: newStatus,
           isPending: isPending,
           isCompleted: isCompleted,
-          colorIndex: newColorIndex
+          colorIndex: newColorIndex,
+          itemStyle: itemStyle
         }
       }
       return item
@@ -158,6 +166,7 @@ Page({
         description: item.description,
         remindAt: item.remindAt,
         status: item.status,
+        color: item.color,
         createdAt: item.createdAt || new Date()
       }
     }))
@@ -201,14 +210,22 @@ Page({
     })
     
     // 格式化数据，添加颜色索引和分割线标识（只有pending状态才有颜色）
-    let pendingIndex = 0
     return sortedList.map((item, index) => {
       const currentStatus = item.status || CONSTANTS.TODO_STATUS.PENDING
       const isPending = currentStatus === CONSTANTS.TODO_STATUS.PENDING
       const isCompleted = currentStatus === CONSTANTS.TODO_STATUS.COMPLETED
       
-      // 只有pending状态才分配颜色
-      const colorIndex = isPending ? ((pendingIndex++ % 4) + 1) : 0
+      // 使用数据库中的 color 字段，如果没有则使用默认颜色（只有pending状态才有颜色）
+      const colorIndex = isPending ? (item.color || CONSTANTS.TODO_DEFAULT_COLOR) : 0
+      
+      // 生成样式字符串（只有pending状态才有颜色样式）
+      let itemStyle = ''
+      if (isPending && colorIndex > 0) {
+        const colorConfig = CONSTANTS.TODO_COLORS[colorIndex]
+        if (colorConfig) {
+          itemStyle = `background: ${colorConfig.gradient}; box-shadow: 0 4rpx 12rpx ${colorConfig.shadowColor};`
+        }
+      }
       
       // 判断是否需要显示分割线：当前项不是pending，但前一项是pending
       let showDivider = false
@@ -232,6 +249,8 @@ Page({
         isPending: isPending,
         isCompleted: isCompleted,
         colorIndex: colorIndex,
+        color: item.color,
+        itemStyle: itemStyle,
         showDivider: showDivider,
         createdAt: item.createdAt
       }
