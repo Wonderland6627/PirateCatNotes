@@ -140,21 +140,14 @@
   font-weight: bold;
 }
 
-.todo-content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-}
-
 .todo-title {
   font-size: 32rpx;
   color: #fff;
   font-weight: 500;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 100%;
 }
 
 .todo-item.gray .todo-title {
@@ -163,23 +156,6 @@
 
 .todo-item.gray .todo-circle {
   border-color: #ccc;
-}
-
-.reminder-icon {
-  width: 32rpx;
-  height: 32rpx;
-  margin-left: 16rpx;
-  margin-right: 16rpx;
-  flex-shrink: 0;
-  opacity: 0.9;
-}
-
-.todo-item .reminder-icon {
-  filter: brightness(0) invert(1);
-}
-
-.todo-item.gray .reminder-icon {
-  filter: brightness(0) invert(0.6);
 }
 
 /* 分割线样式 */
@@ -212,7 +188,7 @@
 
 .create-input-wrapper {
   width: 100%;
-  height: 270rpx;
+  height: 360rpx;
   padding: 32rpx;
   background: transparent;
   border: 3rpx solid #ff9ecf;

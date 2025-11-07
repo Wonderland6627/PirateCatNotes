@@ -239,15 +239,11 @@ Page({
       // 处理content中的换行符，替换为空格以确保单行显示
       const displayContent = commonUtils.replaceNewlines(item.content || '', ' ')
       
-      // 判断是否有提醒时间
-      const hasReminder = !!(item.remindAt && dateUtils.safeParseDate(item.remindAt))
-      
       return {
         _id: item._id,
         content: displayContent,
         description: item.description,
         remindAt: item.remindAt ? dateUtils.formatDate(item.remindAt) : '',
-        hasReminder: hasReminder,
         status: currentStatus,
         isPending: isPending,
         isCompleted: isCompleted,

@@ -58,12 +58,6 @@
           <view class="todo-content">
             <text class="todo-title">{{item.content}}</text>
           </view>
-          <image 
-            wx:if="{{item.hasReminder}}"
-            class="reminder-icon"
-            src="../../images/icons/reminder.svg"
-            mode="aspectFit"
-          />
         </view>
       </block>
     </view>

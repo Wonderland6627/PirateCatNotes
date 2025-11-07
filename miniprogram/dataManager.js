@@ -354,7 +354,7 @@ class DataManager {
         }
       })
 
-      log.info('更新待办事项状态成功: ' + todo.content + ' -> ' + status)
+      log.info('更新待办事项状态成功: ' + todoId + ' -> ' + status)
       return true
     } catch (error) {
       log.error('更新待办事项状态失败: ' + JSON.stringify(error))
