@@ -330,6 +330,110 @@ class DataManager {
       return false
     }
   }
+
+  /**
+   * 更新待办事项信息
+   * @param {string} todoId - 待办事项ID
+   * @param {Object} todoData - 待办事项数据 { content, description, remindAt }
+   * @returns {Promise<boolean>} 是否更新成功
+   */
+  async updateTodo(todoId, todoData) {
+    try {
+      if (!todoId) {
+        log.error('更新待办事项失败: todoId为空')
+        return false
+      }
+
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      // 检查待办事项是否属于当前用户
+      const queryResult = await todoCollection.doc(todoId).get()
+      
+      if (!queryResult.data) {
+        log.error('更新待办事项失败: 待办事项不存在 ' + todoId)
+        return false
+      }
+
+      const todo = queryResult.data
+      if (todo.creatorOpenID !== this._openid) {
+        log.error('更新待办事项失败: 无权操作此待办事项 ' + todoId)
+        return false
+      }
+
+      // 统一使用 dateUtils 解析日期时间
+      let remindAt = null
+      if (todoData.remindAt) {
+        remindAt = dateUtils.safeParseDate(todoData.remindAt)
+        if (!remindAt) {
+          log.error('更新待办事项失败: 无法解析提醒时间 ' + JSON.stringify(todoData.remindAt))
+          return false
+        }
+      }
+
+      // 准备要更新的数据
+      const updateData = {
+        updatedAt: db.serverDate()
+      }
+
+      if (todoData.content !== undefined) {
+        updateData.content = todoData.content
+      }
+      if (todoData.description !== undefined) {
+        updateData.description = todoData.description || ''
+      }
+      if (todoData.remindAt !== undefined) {
+        updateData.remindAt = remindAt
+      }
+
+      // 更新数据
+      await todoCollection.doc(todoId).update({
+        data: updateData
+      })
+
+      log.info('更新待办事项成功: ' + todoId + ' Data: ' + JSON.stringify(updateData))
+      return true
+    } catch (error) {
+      log.error('更新待办事项失败: ' + JSON.stringify(error))
+      return false
+    }
+  }
+
+  /**
+   * 根据ID获取待办事项
+   * @param {string} todoId - 待办事项ID
+   * @returns {Promise<Object|null>} 待办事项数据，不存在返回null
+   */
+  async getTodoById(todoId) {
+    try {
+      if (!todoId) {
+        log.error('获取待办事项失败: todoId为空')
+        return null
+      }
+
+      const db = wx.cloud.database()
+      const todoCollection = db.collection(CONSTANTS.COLLECTION.TODO)
+      
+      const queryResult = await todoCollection.doc(todoId).get()
+      
+      if (!queryResult.data) {
+        log.error('获取待办事项失败: 待办事项不存在 ' + todoId)
+        return null
+      }
+
+      const todo = queryResult.data
+      // 检查权限
+      if (todo.creatorOpenID !== this._openid) {
+        log.error('获取待办事项失败: 无权访问此待办事项 ' + todoId)
+        return null
+      }
+
+      return todo
+    } catch (error) {
+      log.error('获取待办事项失败: ' + JSON.stringify(error))
+      return null
+    }
+  }
 }
 
 // 导出单例

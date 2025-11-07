@@ -293,6 +293,24 @@ Page({
   },
 
   /**
+   * 点击待办事项（跳转到编辑页面）
+   * @param {Object} e - 事件对象
+   */
+  onTodoItemTap(e) {
+    const { id } = e.currentTarget.dataset
+    
+    if (!id) {
+      log.error('跳转失败: id为空')
+      return
+    }
+
+    // 跳转到编辑页面
+    wx.navigateTo({
+      url: `/pages/todo-edit/index?id=${id}`
+    })
+  },
+
+  /**
    * 完成创建待办
    */
   async onCreateTodoComplete() {

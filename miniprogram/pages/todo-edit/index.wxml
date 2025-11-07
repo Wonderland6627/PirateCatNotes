@@ -1,0 +1,61 @@
+<!--pages/todo-edit/index.wxml - 编辑待办页面-->
+<view class="container">
+  <view class="content">
+    <!-- 标题输入 -->
+    <view class="cell">
+      <textarea 
+        class="cell-input title-input"
+        placeholder="输入标题"
+        value="{{content}}"
+        bindinput="onContentInput"
+        auto-height="{{true}}"
+        maxlength="{{500}}"
+        show-confirm-bar="{{false}}"
+      ></textarea>
+    </view>
+
+    <!-- 备注输入 -->
+    <view class="cell">
+      <textarea 
+        class="cell-input description-input"
+        placeholder="输入备注"
+        value="{{description}}"
+        bindinput="onDescriptionInput"
+        auto-height="{{true}}"
+        maxlength="{{1000}}"
+        show-confirm-bar="{{false}}"
+      ></textarea>
+    </view>
+
+    <!-- 提醒日期和时间 -->
+    <view class="cell cell-picker">
+      <view class="cell-label">提醒日期</view>
+      <picker 
+        mode="date" 
+        value="{{remindDate}}"
+        bindchange="onRemindDateChange"
+      >
+        <view class="cell-value {{!remindDate ? 'placeholder' : ''}}">{{remindDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="cell cell-picker">
+      <view class="cell-label">提醒时间</view>
+      <picker 
+        mode="time" 
+        value="{{remindTime}}"
+        bindchange="onRemindTimeChange"
+      >
+        <view class="cell-value {{!remindTime ? 'placeholder' : ''}}">{{remindTime || '选择时间'}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 完成按钮 -->
+  <view class="footer">
+    <view class="save-btn" bindtap="onSave">
+      <text class="save-btn-text">完成</text>
+    </view>
+  </view>
+</view>
+
