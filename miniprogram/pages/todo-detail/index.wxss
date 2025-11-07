@@ -23,331 +23,48 @@
   box-sizing: border-box;
 }
 
-/* 状态头部 */
-.status-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24rpx;
-  margin-bottom: 40rpx;
-  flex-wrap: wrap;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 12rpx 32rpx;
-  border-radius: 40rpx;
-  font-size: 28rpx;
-  font-weight: 500;
-  background-color: rgba(0, 0, 0, 0.05);
-  border: 2rpx solid currentColor;
-}
-
-.status-badge.status-pending {
-  background-color: rgba(255, 152, 0, 0.1);
-  border-color: #ff9800;
-  color: #ff9800;
-}
-
-.status-badge.status-reminded {
-  background-color: rgba(33, 150, 243, 0.1);
-  border-color: #2196f3;
-  color: #2196f3;
-}
-
-.status-badge.status-completed {
-  background-color: rgba(76, 175, 80, 0.1);
-  border-color: #4caf50;
-  color: #4caf50;
-}
-
-/* 重新启用按钮 */
-.reactivate-button {
-  padding: 12rpx 32rpx;
-  border-radius: 40rpx;
-  font-size: 26rpx;
-  font-weight: 500;
-  background-color: #fff;
-  border: 2rpx solid #07c160;
-  color: #07c160;
-  line-height: 1.5;
-}
-
-.reactivate-button::after {
-  border: none;
-}
-
-.reactivate-button:active {
-  background-color: rgba(7, 193, 96, 0.1);
-}
-
-/* 勾选按钮 */
-.cell-circle {
-  width: 40rpx;
-  height: 40rpx;
-  border: 3rpx solid #fff;
-  border-radius: 50%;
-  margin-right: 24rpx;
-  flex-shrink: 0;
-  position: relative;
-  cursor: pointer;
-  align-self: center; /* 默认居中 */
-}
-
-/* 开状态时，勾选按钮在左上角 */
-.cell-circle.top-aligned {
-  align-self: flex-start;
-  margin-top: 0;
-}
-
-.title-cell .cell-circle {
-  border-color: #fff;
-}
-
-.title-cell .cell-circle.checked {
-  background-color: #fff;
-}
-
-.title-cell .cell-circle.checked::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #07c160;
-  font-size: 24rpx;
-  font-weight: bold;
-}
-
-.info-cell .cell-circle {
-  border-color: #ddd;
-  background-color: #fff;
-}
-
-.info-cell .cell-circle.checked {
-  background-color: #fff;
-  border-color: #07c160;
-}
-
-.info-cell .cell-circle.checked::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #07c160;
-  font-size: 24rpx;
-  font-weight: bold;
-}
-
-.readonly-cell .cell-circle {
-  border-color: #ddd;
-  background-color: #fff;
-}
-
-.readonly-cell .cell-circle.checked {
-  background-color: #fff;
-  border-color: #ddd;
-}
-
-.readonly-cell .cell-circle.checked::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #07c160;
-  font-size: 24rpx;
-  font-weight: bold;
-}
-
-/* 标题卡片 */
-.content-cell {
+.detail-item {
   width: 100%;
-  display: flex;
-  align-items: flex-start;
-  background-color: #fff;
-  border-radius: 16rpx;
-  padding: 40rpx 32rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
-  box-sizing: border-box;
-}
-
-.title-cell {
-  background: linear-gradient(135deg, #ff9ecf 0%, #ff84c4 100%);
-  box-shadow: 0 4rpx 12rpx rgba(255, 158, 207, 0.3);
-}
-
-.content-wrapper {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.content-label {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 0;
-  line-height: 1.5;
-}
-
-.title-cell .content-label {
-  color: #fff;
-}
-
-/* 虚线分割线 */
-.divider {
-  width: 100%;
-  height: 0;
-  border-top: 2rpx dashed rgba(255, 255, 255, 0.5);
-  margin: 16rpx 0;
-}
-
-.info-wrapper .divider {
-  border-top-color: rgba(0, 0, 0, 0.1);
-  margin: 12rpx 0;
-  /* 虚线只在wrapper范围内，居中显示 */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.content-wrapper .divider {
-  /* 标题cell的虚线也只在wrapper范围内 */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.content-input-wrapper {
-  width: 100%;
-  margin-top: 16rpx;
-}
-
-.content-input {
-  width: 100%;
-  min-height: 80rpx;
-  padding: 16rpx;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 8rpx;
-  font-size: 32rpx;
-  color: #fff;
-  line-height: 1.6;
-  box-sizing: border-box;
-}
-
-.content-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* 信息卡片 */
-.info-cell {
-  width: 100%;
-  display: flex;
-  align-items: center; /* 默认居中 */
   background-color: #fff;
   border-radius: 16rpx;
   padding: 32rpx;
-  margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
 }
 
-/* 开状态时，cell内容顶部对齐 */
-.info-cell.opened {
-  align-items: flex-start;
+.title-item {
+  margin-top: 0;
+  padding: 40rpx 32rpx;
 }
 
-.info-cell .info-wrapper {
-  align-items: flex-start;
-}
-
-.info-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.picker-wrapper {
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.info-label {
-  font-size: 30rpx;
+.title-text {
+  font-size: 40rpx;
+  font-weight: 600;
   color: #333;
-  font-weight: 500;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.detail-label {
   margin-bottom: 12rpx;
 }
 
-.picker-wrapper .info-label {
-  margin-bottom: 0;
-  flex-shrink: 0;
-  margin-right: 32rpx;
+.label-text {
+  font-size: 26rpx;
+  color: #999;
+  font-weight: 400;
 }
 
-.info-input-wrapper {
-  width: 100%;
-  margin-top: 12rpx;
+.detail-value {
+  margin-top: 4rpx;
 }
 
-.info-input {
-  width: 100%;
-  min-height: 120rpx;
-  padding: 16rpx;
-  background-color: #f8f8f8;
-  border-radius: 8rpx;
-  font-size: 28rpx;
+.value-text {
+  font-size: 30rpx;
   color: #333;
   line-height: 1.6;
-  box-sizing: border-box;
-}
-
-.info-input::placeholder {
-  color: #999;
-}
-
-.info-value {
-  font-size: 30rpx;
-  color: #666;
-  text-align: right;
-  margin-top: 8rpx;
   word-break: break-word;
-  line-height: 1.5;
-}
-
-.info-value-preview {
-  font-size: 30rpx;
-  color: #666;
-  text-align: right;
-  flex: 1;
-  word-break: break-word;
-  line-height: 1.5;
-}
-
-/* 选择器样式 */
-.picker-container {
-  display: flex;
-  gap: 16rpx;
-  flex: 1;
-  justify-content: flex-end;
-}
-
-.picker-item {
-  display: inline-block;
-}
-
-.picker-trigger {
-  display: inline-block;
-  padding: 8rpx 16rpx;
-  background-color: #f0f0f0;
-  border-radius: 6rpx;
-  font-size: 26rpx;
-  color: #666;
 }
 
 .status-text {
@@ -366,38 +83,3 @@
   color: #4caf50;
 }
 
-/* 保存按钮 */
-.save-button-container {
-  margin-top: 40rpx;
-  padding: 0;
-}
-
-.save-button {
-  width: 100%;
-  height: 88rpx;
-  line-height: 88rpx;
-  border-radius: 44rpx;
-  font-size: 32rpx;
-  font-weight: 500;
-  border: none;
-  outline: none;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-}
-
-.save-button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-}
-
-.save-button.disabled {
-  background-color: #e0e0e0;
-  color: #999;
-}
-
-.save-button[disabled] {
-  opacity: 1;
-}

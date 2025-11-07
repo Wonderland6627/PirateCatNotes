@@ -7,94 +7,65 @@
 
   <!-- 详情内容 -->
   <view class="detail-content" wx:else>
-    <!-- 提醒状态 - 顶部居中显示 -->
-    <view class="status-header" wx:if="{{todoData.status}}">
-      <view class="status-badge status-text status-{{todoData.status}}">
-        <text wx:if="{{todoData.status === 'pending'}}">待提醒</text>
-        <text wx:elif="{{todoData.status === 'reminded'}}">已提醒</text>
-        <text wx:elif="{{todoData.status === 'completed'}}">已完成</text>
-        <text wx:else>{{todoData.status}}</text>
+      <!-- 标题 - 突出显示 -->
+      <view class="detail-item title-item">
+        <view class="title-text">{{content}}</view>
       </view>
-      <!-- 重新启用按钮 - 仅在已完成状态时显示 -->
-      <button 
-        wx:if="{{todoData.status === 'completed'}}"
-        class="reactivate-button"
-        bindtap="onReactivate"
-      >
-        重新启用
-      </button>
-    </view>
-    
-    <!-- 动态渲染字段 -->
-    <block wx:for="{{fieldConfig}}" wx:key="key">
-      <!-- 文本输入类型字段 -->
-      <view wx:if="{{item.type === 'text_input'}}" class="{{item.key === 'content' ? 'content-cell title-cell' : 'info-cell'}} {{item.key === 'content' ? 'opened' : ''}} {{item.key !== 'content' && item.isOpen ? 'opened' : ''}}">
-        <view 
-          class="cell-circle {{item.key === 'content' ? 'checked top-aligned' : ''}} {{item.key !== 'content' && item.isOpen ? 'checked top-aligned' : ''}}"
-          data-field="{{item.key}}"
-          bindtap="{{item.required ? '' : 'onToggleField'}}"
-        ></view>
-        <view class="{{item.key === 'content' ? 'content-wrapper' : 'info-wrapper'}}">
-          <view class="{{item.key === 'content' ? 'content-label' : 'info-label'}}">{{item.label}}</view>
-          <view class="divider" wx:if="{{item.key === 'content' || item.isOpen}}"></view>
-          <view class="{{item.key === 'content' ? 'content-input-wrapper' : 'info-input-wrapper'}}" wx:if="{{item.key === 'content' || item.isOpen}}">
-            <textarea 
-              class="{{item.key === 'content' ? 'content-input' : 'info-input'}}"
-              value="{{item.key === 'content' ? todoData.content : todoData.description}}"
-              data-field="{{item.key}}"
-              bindinput="onTextInput"
-              placeholder="请输入{{item.label}}"
-              maxlength="{{item.key === 'content' ? 100 : 200}}"
-              auto-height
-            ></textarea>
-          </view>
+
+      <!-- 事项描述 -->
+      <view class="detail-item" wx:if="{{description}}">
+        <view class="detail-label">
+          <text class="label-text">事项描述</text>
+        </view>
+        <view class="detail-value">
+          <text class="value-text">{{description}}</text>
         </view>
       </view>
 
-      <!-- 日期时间类型字段 - 已完成状态时隐藏 -->
-      <view wx:elif="{{item.type === 'datetime' && todoData.status !== 'completed'}}" class="info-cell {{item.isOpen ? 'opened' : ''}}">
-        <view 
-          class="cell-circle {{item.isOpen ? 'checked top-aligned' : ''}}"
-          data-field="{{item.key}}"
-          bindtap="onToggleField"
-        ></view>
-        <view class="info-wrapper picker-wrapper">
-          <view class="info-label">{{item.label}}</view>
-          <view class="info-value-preview" wx:if="{{item.isOpen && todoFormatted.remindAt}}">{{todoFormatted.remindAt}}</view>
-          <view class="picker-container" wx:if="{{item.isOpen}}">
-            <picker 
-              mode="date"
-              value="{{todoFormatted.remindDate || currentDate}}"
-              start="{{currentDate}}"
-              bindchange="onDateChange"
-              class="picker-item"
-            >
-              <view class="picker-trigger">选择日期</view>
-            </picker>
-            <picker 
-              mode="time"
-              value="{{todoFormatted.remindTime || defaultTime}}"
-              bindchange="onTimeChange"
-              class="picker-item"
-            >
-              <view class="picker-trigger">选择时间</view>
-            </picker>
-          </view>
+      <!-- 提醒时间 -->
+      <view class="detail-item" wx:if="{{remindAt}}">
+        <view class="detail-label">
+          <text class="label-text">提醒时间</text>
+        </view>
+        <view class="detail-value">
+          <text class="value-text">{{remindAt}}</text>
         </view>
       </view>
 
-    </block>
-    
-    <!-- 保存按钮 -->
-    <view class="save-button-container">
-      <button 
-        class="save-button {{hasChanges ? 'active' : 'disabled'}}"
-        bindtap="onSave"
-        disabled="{{!hasChanges || saving}}"
-      >
-        <text wx:if="{{saving}}">保存中...</text>
-        <text wx:else>保存</text>
-      </button>
+      <!-- 状态 -->
+      <view class="detail-item">
+        <view class="detail-label">
+          <text class="label-text">状态</text>
+        </view>
+        <view class="detail-value">
+          <text class="value-text status-text status-{{status}}">
+            <text wx:if="{{status === 'pending'}}">待提醒</text>
+            <text wx:elif="{{status === 'reminded'}}">已提醒</text>
+            <text wx:elif="{{status === 'completed'}}">已完成</text>
+            <text wx:else>{{status}}</text>
+          </text>
+        </view>
+      </view>
+
+      <!-- 创建时间 -->
+      <view class="detail-item" wx:if="{{createdAt}}">
+        <view class="detail-label">
+          <text class="label-text">创建时间</text>
+        </view>
+        <view class="detail-value">
+          <text class="value-text">{{createdAt}}</text>
+        </view>
+      </view>
+
+      <!-- 更新时间 -->
+      <view class="detail-item" wx:if="{{updatedAt}}">
+        <view class="detail-label">
+          <text class="label-text">更新时间</text>
+        </view>
+        <view class="detail-value">
+          <text class="value-text">{{updatedAt}}</text>
+        </view>
+      </view>
     </view>
-  </view>
 </view>
+
