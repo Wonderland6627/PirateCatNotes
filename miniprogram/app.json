@@ -1,7 +1,7 @@
 {
   "pages": [
     "pages/todo-list/index",
-    "pages/todo-detail/index",
+    "pages/todo/index",
     "pages/temp/index",
     "pages/profile/index",
     "pages/edit-profile/index"

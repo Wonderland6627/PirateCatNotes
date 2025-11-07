@@ -67,22 +67,6 @@ Page({
   },
 
   /**
-   * 点击待办事项cell，跳转到详情页
-   * @param {Object} e - 事件对象
-   */
-  onTodoItemTap(e) {
-    const todoId = e.currentTarget.dataset.id
-    if (!todoId) {
-      log.error('跳转详情页失败: todoId为空')
-      return
-    }
-
-    wx.navigateTo({
-      url: `/pages/todo-detail/index?id=${todoId}`
-    })
-  },
-
-  /**
    * 切换待办事项状态
    * @param {Object} e - 事件对象
    */

@@ -48,7 +48,7 @@ exports.main = async (event, context) => {
           touser: todo.creatorOpenID || todo._openid,
           template_id: templateId,
           data: messageData,
-          page: 'pages/todo-detail/index' // 点击消息跳转的页面
+          page: 'pages/todo/index' // 点击消息跳转的页面
         })
         
         console.log('发送订阅消息成功:', todo._id, sendResult)
