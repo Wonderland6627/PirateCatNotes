@@ -269,8 +269,8 @@ Page({
     if (remindDate) {
       remindAt = dateUtils.combineDateAndTime(remindDate, remindTime)
     }
-
-    // 如果有提醒时间，先请求订阅消息授权（必须在用户点击的同步调用栈中）
+    this.doSave(todoId, content, description, remindAt, selectedColor)
+    // 如果有提醒时间，请求订阅消息授权
     if (remindAt) {
       const templateId = CONSTANTS.SUBSCRIBE_MESSAGE_TEMPLATE_ID
       wx.requestSubscribeMessage({
@@ -278,10 +278,6 @@ Page({
         success: (res) => {
           log.info('订阅消息结果: ' + JSON.stringify(res))
           const status = res[templateId]
-          
-          // 在授权回调中执行保存操作
-          this.doSave(todoId, content, description, remindAt, selectedColor)
-          
           if (status === 'accept') {
             log.info('用户已接受订阅消息')
           } else if (status === 'reject') {
@@ -296,13 +292,8 @@ Page({
         },
         fail: (err) => {
           log.error('请求订阅消息权限失败: ' + JSON.stringify(err))
-          // 即使失败也继续保存
-          this.doSave(todoId, content, description, remindAt, selectedColor)
         }
       })
-    } else {
-      // 没有提醒时间，直接保存
-      this.doSave(todoId, content, description, remindAt, selectedColor)
     }
   },
 
