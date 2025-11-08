@@ -245,6 +245,7 @@ Page({
         content: displayContent,
         description: item.description,
         remindAt: item.remindAt ? dateUtils.formatDate(item.remindAt) : '',
+        hasRemind: !!item.remindAt, // 是否有提醒时间
         status: currentStatus,
         isPending: isPending,
         isCompleted: isCompleted,

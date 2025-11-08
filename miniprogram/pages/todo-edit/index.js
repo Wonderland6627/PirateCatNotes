@@ -155,7 +155,7 @@ Page({
   /**
    * 保存待办事项
    */
-  async onSave() {
+  onSave() {
     const { todoId, content, description, remindDate, remindTime, selectedColor } = this.data
 
     // 防止重复提交
@@ -164,13 +164,53 @@ Page({
     }
     this._saving = true
 
-    try {
-      // 组合提醒时间
-      let remindAt = null
-      if (remindDate) {
-        remindAt = dateUtils.combineDateAndTime(remindDate, remindTime)
-      }
+    // 组合提醒时间
+    let remindAt = null
+    if (remindDate) {
+      remindAt = dateUtils.combineDateAndTime(remindDate, remindTime)
+    }
 
+    // 如果有提醒时间，先请求订阅消息授权（必须在用户点击的同步调用栈中）
+    if (remindAt) {
+      const templateId = CONSTANTS.SUBSCRIBE_MESSAGE_TEMPLATE_ID
+      wx.requestSubscribeMessage({
+        tmplIds: [templateId],
+        success: (res) => {
+          log.info('订阅消息结果: ' + JSON.stringify(res))
+          const status = res[templateId]
+          
+          // 在授权回调中执行保存操作
+          this.doSave(todoId, content, description, remindAt, selectedColor)
+          
+          if (status === 'accept') {
+            log.info('用户已接受订阅消息')
+          } else if (status === 'reject') {
+            log.info('用户拒绝订阅消息')
+            // 提示用户
+            wx.showToast({
+              title: '已拒绝提醒授权',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        },
+        fail: (err) => {
+          log.error('请求订阅消息权限失败: ' + JSON.stringify(err))
+          // 即使失败也继续保存
+          this.doSave(todoId, content, description, remindAt, selectedColor)
+        }
+      })
+    } else {
+      // 没有提醒时间，直接保存
+      this.doSave(todoId, content, description, remindAt, selectedColor)
+    }
+  },
+
+  /**
+   * 执行保存操作
+   */
+  async doSave(todoId, content, description, remindAt, selectedColor) {
+    try {
       // 准备更新数据
       const updateData = {
         content: content.trim(),

@@ -67,7 +67,10 @@ const CONSTANTS = {
   },
 
   // 默认颜色值
-  TODO_DEFAULT_COLOR: 1
+  TODO_DEFAULT_COLOR: 1,
+
+  // 订阅消息模板ID
+  SUBSCRIBE_MESSAGE_TEMPLATE_ID: 'IiYABIcxdWwaAbqXPb71Yijw-iYMRlbRpghZCT58eQ8'
 }
 
 module.exports = CONSTANTS

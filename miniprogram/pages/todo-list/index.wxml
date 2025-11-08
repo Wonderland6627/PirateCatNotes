@@ -57,6 +57,7 @@
             catchtap="onToggleTodoStatus"
           ></view>
           <text class="todo-title">{{item.content}}</text>
+          <view class="todo-remind-icon" wx:if="{{item.hasRemind}}">🔔</view>
         </view>
       </block>
     </view>
