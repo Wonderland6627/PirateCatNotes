@@ -33,6 +33,7 @@
       <picker 
         mode="date" 
         value="{{remindDate}}"
+        start="{{startDate}}"
         bindchange="onRemindDateChange"
       >
         <view class="cell-value {{!remindDate ? 'placeholder' : ''}}">{{remindDate || '选择日期'}}</view>
@@ -44,6 +45,7 @@
       <picker 
         mode="time" 
         value="{{remindTime}}"
+        start="{{startTime}}"
         bindchange="onRemindTimeChange"
       >
         <view class="cell-value {{!remindTime ? 'placeholder' : ''}}">{{remindTime || '选择时间'}}</view>

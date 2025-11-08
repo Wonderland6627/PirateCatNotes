@@ -15,6 +15,8 @@ Page({
     description: '', // 备注
     remindDate: '', // 提醒日期（yyyy-MM-dd格式）
     remindTime: '', // 提醒时间（HH:mm格式）
+    startDate: '', // 日期选择器起始日期（yyyy-MM-dd格式）
+    startTime: '', // 时间选择器起始时间（HH:mm格式）
     selectedColor: CONSTANTS.TODO_DEFAULT_COLOR, // 选中的颜色索引
     colorOptions: Object.values(CONSTANTS.TODO_COLORS), // 从常量中获取颜色选项
     saveBtnStyle: '', // 完成按钮样式
@@ -78,6 +80,24 @@ Page({
         remindTime = dateUtils.formatTimeOnly(todo.remindAt)
       }
 
+      // 计算起始日期和时间
+      // 如果有值，使用该值；否则使用当前时间+1分钟
+      let startDate = remindDate
+      let startTime = remindTime
+      
+      if (!startDate || !startTime) {
+        // 获取当前时间+1分钟
+        const now = new Date()
+        now.setMinutes(now.getMinutes() + 1)
+        
+        if (!startDate) {
+          startDate = dateUtils.formatDateOnly(now)
+        }
+        if (!startTime) {
+          startTime = dateUtils.formatTimeOnly(now)
+        }
+      }
+
       // 解析颜色（使用默认颜色）
       const selectedColor = todo.color || CONSTANTS.TODO_DEFAULT_COLOR
       const colorConfig = CONSTANTS.TODO_COLORS[selectedColor]
@@ -88,6 +108,8 @@ Page({
         description: todo.description || '',
         remindDate: remindDate,
         remindTime: remindTime,
+        startDate: startDate,
+        startTime: startTime,
         selectedColor: selectedColor,
         saveBtnStyle: `background: ${colorConfig.gradient}; box-shadow: 0 4rpx 12rpx ${colorConfig.shadowColor};`,
         loading: false
