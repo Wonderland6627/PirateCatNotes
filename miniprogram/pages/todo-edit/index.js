@@ -20,7 +20,9 @@ Page({
     selectedColor: CONSTANTS.TODO_DEFAULT_COLOR, // 选中的颜色索引
     colorOptions: Object.values(CONSTANTS.TODO_COLORS), // 从常量中获取颜色选项
     saveBtnStyle: '', // 完成按钮样式
-    loading: false // 是否正在加载
+    loading: false, // 是否正在加载
+    timeColumns: [[], []], // 时间选择器的列数据 [小时列, 分钟列]
+    timeIndex: [0, 0] // 时间选择器的当前选中索引 [小时索引, 分钟索引]
   },
 
   /**
@@ -86,9 +88,15 @@ Page({
       let startTime = remindTime
       
       if (!startDate || !startTime) {
-        // 获取当前时间+1分钟
+        // 获取当前时间，向上取整到最近的5分钟
         const now = new Date()
-        now.setMinutes(now.getMinutes() + 1)
+        const minutes = now.getMinutes()
+        const roundedMinutes = Math.ceil(minutes / 5) * 5
+        now.setMinutes(roundedMinutes)
+        if (roundedMinutes >= 60) {
+          now.setHours(now.getHours() + 1)
+          now.setMinutes(0)
+        }
         
         if (!startDate) {
           startDate = dateUtils.formatDateOnly(now)
@@ -102,6 +110,9 @@ Page({
       const selectedColor = todo.color || CONSTANTS.TODO_DEFAULT_COLOR
       const colorConfig = CONSTANTS.TODO_COLORS[selectedColor]
 
+      // 初始化时间选择器数据
+      const { timeColumns, timeIndex } = this.initTimePicker(remindTime || startTime)
+
       this.setData({
         todoId: todoId,
         content: todo.content || '',
@@ -112,7 +123,9 @@ Page({
         startTime: startTime,
         selectedColor: selectedColor,
         saveBtnStyle: `background: ${colorConfig.gradient}; box-shadow: 0 4rpx 12rpx ${colorConfig.shadowColor};`,
-        loading: false
+        loading: false,
+        timeColumns: timeColumns,
+        timeIndex: timeIndex
       })
     } catch (error) {
       log.error('加载待办事项数据失败: ' + JSON.stringify(error))
@@ -154,11 +167,76 @@ Page({
   },
 
   /**
+   * 初始化时间选择器数据
+   * @param {string} timeStr - 时间字符串，格式 HH:mm
+   * @returns {Object} { timeColumns, timeIndex }
+   */
+  initTimePicker(timeStr) {
+    // 生成小时选项 (0-23)
+    const hours = []
+    for (let i = 0; i < 24; i++) {
+      hours.push({
+        label: String(i).padStart(2, '0'),
+        value: i
+      })
+    }
+
+    // 生成分钟选项 (0, 5, 10, 15, ..., 55)
+    const minutes = []
+    for (let i = 0; i < 60; i += 5) {
+      minutes.push({
+        label: String(i).padStart(2, '0'),
+        value: i
+      })
+    }
+
+    // 解析当前时间，找到对应的索引
+    let hourIndex = 0
+    let minuteIndex = 0
+    
+    if (timeStr) {
+      let [hour, minute] = timeStr.split(':').map(Number)
+      // 将分钟向上取整到最近的5分钟
+      const roundedMinute = Math.ceil(minute / 5) * 5
+      
+      // 如果分钟向上取整后超过59，小时加1，分钟设为0
+      if (roundedMinute >= 60) {
+        hour = hour + 1
+        minuteIndex = 0
+      } else {
+        minuteIndex = Math.floor(roundedMinute / 5)
+      }
+      
+      // 确保小时在有效范围内
+      if (hour >= 24) {
+        hour = 23
+        minuteIndex = 11 // 设置为23:55
+      } else if (hour < 0) {
+        hour = 0
+        minuteIndex = 0
+      }
+      
+      hourIndex = hour
+    }
+
+    return {
+      timeColumns: [hours, minutes],
+      timeIndex: [hourIndex, minuteIndex]
+    }
+  },
+
+  /**
    * 选择提醒时间
    */
   onRemindTimeChange(e) {
+    const [hourIndex, minuteIndex] = e.detail.value
+    const hour = this.data.timeColumns[0][hourIndex].label
+    const minute = this.data.timeColumns[1][minuteIndex].label
+    const timeStr = `${hour}:${minute}`
+    
     this.setData({
-      remindTime: e.detail.value
+      remindTime: timeStr,
+      timeIndex: [hourIndex, minuteIndex]
     })
   },
 

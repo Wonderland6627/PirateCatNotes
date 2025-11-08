@@ -43,9 +43,10 @@
     <view class="cell cell-picker">
       <view class="cell-label">提醒时间</view>
       <picker 
-        mode="time" 
-        value="{{remindTime}}"
-        start="{{startTime}}"
+        mode="multiSelector" 
+        value="{{timeIndex}}"
+        range="{{timeColumns}}"
+        range-key="label"
         bindchange="onRemindTimeChange"
       >
         <view class="cell-value {{!remindTime ? 'placeholder' : ''}}">{{remindTime || '选择时间'}}</view>
