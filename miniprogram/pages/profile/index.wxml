@@ -24,6 +24,15 @@
       <image class="menu-arrow" src="/images/icons/copy.png"></image>
     </view>
 
+    <!-- 权限管理 -->
+    <view class="menu-item" bindtap="onNavigateToPermissionManage">
+      <view class="menu-left">
+        <image class="menu-icon" src="/images/icons/setting.svg"></image>
+        <text class="menu-text">权限管理</text>
+      </view>
+      <image class="menu-arrow" src="/images/icons/copy.png"></image>
+    </view>
+
     <!-- 设置 -->
     <view class="menu-item" bindtap="onNavigateToSettings">
       <view class="menu-left">

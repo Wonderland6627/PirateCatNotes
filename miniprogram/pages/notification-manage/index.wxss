@@ -1,0 +1,147 @@
+/* pages/notification-manage/index.wxss */
+.notification-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+
+/* 圆角 cell 样式 */
+.cell {
+  width: 100%;
+  padding: 32rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cell-label {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.info-icon {
+  width: 32rpx;
+  height: 32rpx;
+  line-height: 32rpx;
+  text-align: center;
+  border-radius: 50%;
+  background-color: #c7c7cc;
+  color: #fff;
+  font-size: 24rpx;
+  margin-left: 12rpx;
+  font-style: normal;
+}
+
+.cell-right {
+  display: flex;
+  align-items: center;
+}
+
+.option-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-right: 12rpx;
+}
+
+.cell-arrow {
+  font-size: 32rpx;
+  color: #999;
+}
+
+/* 描述文字 */
+.description-text {
+  width: 100%;
+  padding: 24rpx 32rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 24rpx;
+  box-sizing: border-box;
+}
+
+.description-text text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 下拉菜单遮罩层 */
+.picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* 下拉菜单内容 */
+.picker-content {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 60vh;
+  overflow: hidden;
+}
+
+.picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx;
+  border-bottom: 1rpx solid #e5e5e5;
+}
+
+.picker-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.picker-close {
+  font-size: 48rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.picker-options {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.picker-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 40rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.picker-option:last-child {
+  border-bottom: none;
+}
+
+.picker-option-selected {
+  color: #576b95;
+}
+
+.picker-option text:first-child {
+  font-size: 32rpx;
+  color: inherit;
+}
+
+.check-icon {
+  font-size: 32rpx;
+  color: #576b95;
+}
+

@@ -75,6 +75,15 @@ Page({
   },
 
   /**
+   * 跳转到权限管理页面
+   */
+  onNavigateToPermissionManage() {
+    wx.navigateTo({
+      url: '/pages/permission-manage/index'
+    })
+  },
+
+  /**
    * 跳转到设置页面
    */
   onNavigateToSettings() {

@@ -1,0 +1,48 @@
+<!--pages/notification-manage/index.wxml-->
+<view class="notification-container">
+  <!-- 接受通知开关 -->
+  <view class="cell">
+    <text class="cell-label">接受通知</text>
+    <switch checked="{{receiveNotifications}}" bindchange="onToggleReceiveNotifications" color="#07c160"/>
+  </view>
+
+  <!-- 描述文字 -->
+  <view class="description-text">
+    <text>允许'提醒小助手'发送以下通知</text>
+  </view>
+
+  <!-- 待办事项提醒 -->
+  <view class="cell" bindtap="onShowTodoReminderPicker">
+    <view class="cell-label">
+      <text>待办事项提醒</text>
+      <text class="info-icon">i</text>
+    </view>
+    <view class="cell-right">
+      <text class="option-text">{{currentTodoReminderLabel}}</text>
+      <text class="cell-arrow">></text>
+    </view>
+  </view>
+
+  <!-- 待办事项提醒下拉菜单 -->
+  <view class="picker-overlay" wx:if="{{showTodoReminderPicker}}" bindtap="onHideTodoReminderPicker">
+    <view class="picker-content" catchtap="onStopPropagation">
+      <view class="picker-header">
+        <text class="picker-title">待办事项提醒</text>
+        <text class="picker-close" bindtap="onHideTodoReminderPicker">×</text>
+      </view>
+      <view class="picker-options">
+        <view 
+          class="picker-option {{todoReminderOption === item.value ? 'picker-option-selected' : ''}}"
+          wx:for="{{todoReminderOptions}}" 
+          wx:key="value"
+          data-option="{{item}}"
+          bindtap="onSelectTodoReminderOption"
+        >
+          <text>{{item.label}}</text>
+          <text class="check-icon" wx:if="{{todoReminderOption === item.value}}">✓</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
