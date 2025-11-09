@@ -1,9 +1,0 @@
-<!--pages/permission-manage/index.wxml-->
-<view class="permission-container">
-  <!-- 通知管理 -->
-  <view class="cell" bindtap="onNavigateToNotificationManage">
-    <text class="cell-label">通知管理</text>
-    <text class="cell-arrow">></text>
-  </view>
-</view>
-
