@@ -87,10 +87,11 @@ Page({
    * 跳转到设置页面
    */
   onNavigateToSettings() {
-    wx.showToast({
-      title: '设置功能开发中',
-      icon: 'none'
-    })
+    // wx.showToast({
+    //   title: '设置功能开发中',
+    //   icon: 'none'
+    // })
+    wx.openSetting();
   },
 
   /**

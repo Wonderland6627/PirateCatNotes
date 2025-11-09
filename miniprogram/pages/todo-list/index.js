@@ -331,6 +331,16 @@ Page({
   },
 
   /**
+   * 从颜色配置中随机选择一个颜色
+   * @returns {number} 颜色值（1-4）
+   */
+  getRandomColor() {
+    const colorKeys = Object.keys(CONSTANTS.TODO_COLORS).map(key => parseInt(key))
+    const randomIndex = Math.floor(Math.random() * colorKeys.length)
+    return colorKeys[randomIndex]
+  },
+
+  /**
    * 完成创建待办
    */
   async onCreateTodoComplete() {
@@ -365,11 +375,15 @@ Page({
     })
 
     try {
+      // 从颜色配置中随机选择一个颜色
+      const randomColor = this.getRandomColor()
+      
       // 准备提交的数据（简化版本，只需要content，remindAt可以为空）
       const todoDataToSubmit = {
         content: newTodoContent.trim(),
         description: '',
-        remindAt: null // 快速创建不设置提醒时间
+        remindAt: null, // 快速创建不设置提醒时间
+        color: randomColor // 随机颜色
       }
       
       // 创建待办事项

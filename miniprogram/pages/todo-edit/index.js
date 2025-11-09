@@ -269,8 +269,8 @@ Page({
     if (remindDate) {
       remindAt = dateUtils.combineDateAndTime(remindDate, remindTime)
     }
-    this.doSave(todoId, content, description, remindAt, selectedColor)
-    // 如果有提醒时间，请求订阅消息授权
+
+    // 如果有提醒时间，先请求订阅消息授权，完成后保存
     if (remindAt) {
       const templateId = CONSTANTS.SUBSCRIBE_MESSAGE_TEMPLATE_ID
       wx.requestSubscribeMessage({
@@ -282,18 +282,16 @@ Page({
             log.info('用户已接受订阅消息')
           } else if (status === 'reject') {
             log.info('用户拒绝订阅消息')
-            // 提示用户
-            wx.showToast({
-              title: '已拒绝提醒授权',
-              icon: 'none',
-              duration: 2000
-            })
           }
+          this.doSave(todoId, content, description, remindAt, selectedColor)
         },
         fail: (err) => {
           log.error('请求订阅消息权限失败: ' + JSON.stringify(err))
+          this.doSave(todoId, content, description, remindAt, selectedColor)
         }
       })
+    } else {
+      this.doSave(todoId, content, description, remindAt, selectedColor)
     }
   },
 
