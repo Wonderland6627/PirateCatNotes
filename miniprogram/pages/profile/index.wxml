@@ -24,15 +24,6 @@
       <text class="cell-arrow">></text>
     </view>
 
-    <!-- 权限管理 -->
-    <view class="cell" bindtap="onNavigateToPermissionManage">
-      <view class="cell-left">
-        <image class="cell-icon" src="/images/icons/setting.svg"></image>
-        <text class="cell-label">权限管理</text>
-      </view>
-      <text class="cell-arrow">></text>
-    </view>
-
     <!-- 设置 -->
     <view class="cell" bindtap="onNavigateToSettings">
       <view class="cell-left">

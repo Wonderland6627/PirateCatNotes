@@ -4,9 +4,7 @@
     "pages/temp/index",
     "pages/profile/index",
     "pages/edit-profile/index",
-    "pages/todo-edit/index",
-    "pages/permission-manage/index",
-    "pages/notification-manage/index"
+    "pages/todo-edit/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
